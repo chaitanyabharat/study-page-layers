@@ -91,7 +91,8 @@ shutil.copytree(ROOT / "admin", site / "admin")
     "repo": cfg["repo"], "branch": cfg.get("branch", "main"), "host": host, "sites": cfg["sites"]}, indent=2), encoding="utf-8")
 
 # 4. Hosting settings: GitHub Pages, Cloudflare Pages / Netlify, Apache
-(site / "CNAME").write_text(host + "\n", encoding="utf-8")
+if "/" not in host and not host.endswith(".github.io"):   # only a custom domain gets a CNAME file
+    (site / "CNAME").write_text(host + "\n", encoding="utf-8")
 (site / ".nojekyll").write_text("", encoding="utf-8")
 (site / "_headers").write_text(
     "/pl.js\n  Cache-Control: public, max-age=300\n  Access-Control-Allow-Origin: *\n\n"

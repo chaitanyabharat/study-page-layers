@@ -1,6 +1,7 @@
 {
-  "_about": "Site-wide settings for the build. host: the domain that serves the files (no https://). sites: the only websites the files will run on. repo: owner/name of this GitHub repository, used by the dashboard.",
-  "host": "study-enhance.qrated.ltd",
+  "_about": "Site-wide settings for the build. host: the address that serves the files, without https:// (a domain, or a github.io address with its path). custom_domain_later: the domain to switch to once its DNS is set. sites: the only websites the files will run on. repo: owner/name of this GitHub repository, used by the dashboard.",
+  "host": "chaitanyabharat.github.io/study-page-layers",
+  "custom_domain_later": "study-enhance.qrated.ltd",
   "sites": ["study.com", "www.study.com", "stage-study.com", "www.stage-study.com"],
   "repo": "chaitanyabharat/study-page-layers",
   "branch": "main"
