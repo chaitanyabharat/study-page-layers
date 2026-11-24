@@ -8,7 +8,8 @@
     "author": "prototype",
     "status": "reviewed",
     "allow": {
-      "script-injection": "It is the New look loader: it adds the page's own reviewed component scripts, from the manifest and with integrity hashes, when the reader is on the new look."
+      "script-injection": "It is the New look loader: it adds the page's own reviewed component scripts, from the manifest and with integrity hashes, when the reader is on the new look.",
+      "size": "Granted by Chaitanya Indupuri, 24 Nov 2026: 8.3 KB gzipped as source because of its long explanatory comments; it ships minified inside each page bundle, well under the limit."
     },
     "sha256": "476ae4e513e80545fa42e3389788f04fa00d0abb104d1a1f2212bab53956bb61",
     "reviewed_by": "eng-lead",
