@@ -1,0 +1,947 @@
+/* =========================================================================
+   Study.com research-hub article refresh, v2. CSS only, no HTML changes.
+   Target: /resources/state-of-ai-jobs-and-skills.html
+
+   HOW THIS FILE WINS WITHOUT !important
+   Site rules top out at two IDs. Every rule here starts with
+     body#promoArticleMain #hub ...            (header, 2 IDs)
+     body#promoArticleMain #hub #hub-content   (article body, 3 IDs)
+   so it outranks the template. !important is kept only where the site
+   uses inline styles (video wrapper, image tables).
+
+   SCOPE
+   body#promoArticleMain is shared by every research-hub promo article.
+   Rules marked [PAGE] key on content unique to this report (heading IDs,
+   chart filenames) and simply do nothing on other pages.
+   ========================================================================= */
+
+/* Poppins and Inter are Study.com brand fonts and are already self-hosted by the site.
+   They are imported here only so the stylesheet also works stand-alone; drop them in production. */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/* -------------------------------------------------------------------------
+   1. TOKENS
+   ------------------------------------------------------------------------- */
+body#promoArticleMain {
+  /* Study.com's Eureka rebrand palette, as used by the homepage, lessons and
+     courses (eureka-lib.css): navy #072435, text #374f5c, blue #007bba,
+     yellow #ffc340. Contrast ratios are against --paper (white). */
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #072435;            /* Eureka navy: headings, dark panels. 16:1 */
+  --ink-2: #374f5c;          /* Eureka text. 8.6:1 */
+  --ink-3: #627680;          /* Eureka secondary text: captions, labels. 4.8:1 */
+  --rule: #d0dee4;           /* Eureka rule */
+  --track: #d6e3ea;
+  --data: #007bba;           /* Eureka blue: links, data, kickers. 4.6:1 */
+  --data-soft: #e3f3ff;      /* Eureka light blue */
+  --signal: #ffc340;         /* brand yellow: highlights only, never text */
+  --accent: #f58f1b;         /* brand orange: fills and accents only, never text */
+  --risk: #a35400;           /* brand orange darkened for text: 5.1:1 */
+  --inverse: #072435;        /* solid controls: background */
+  --on-inverse: #ffffff;     /* solid controls: text */
+  --chrome: #072435;         /* footer */
+  --mat: #ffffff;            /* the light mat behind images that are not recolored */
+
+  --f-title: "Poppins", "Helvetica Neue", Arial, sans-serif;   /* brand: H1 and big figures */
+  --f-display: "Inter", "Helvetica Neue", Arial, sans-serif;    /* brand: H2-H4 and interface text */
+  --f-body: "Inter", "Helvetica Neue", Arial, sans-serif;     /* brand body face; Literata is a per-page reading option */
+  --f-data: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  --t-body: 17px;  --lh-body: 1.68;
+  --t-lede: 21px;
+  --t-h3: 22px;
+  --t-h2: clamp(30px, 2.2vw + 14px, 44px);
+  --t-small: 15.5px;
+
+  --measure: 680px;          /* reading column */
+  --wide: 880px;             /* charts, chapter heads, cards */
+  --xwide: 1080px;           /* header and key findings on large screens */
+  --gutter: 20px;
+  --sp-chapter: 112px;
+
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+@media (max-width: 767.9px) {
+  body#promoArticleMain {
+    --t-body: 17px; --lh-body: 1.65;
+    --t-lede: 19px;
+    --t-h3: 19.5px;
+    --t-small: 15px;
+    --gutter: 16px;
+    --sp-chapter: 76px;
+  }
+}
+/* DARK THEME (experimental). The theme control sets html[data-theme="dark"],
+   either from the reader's choice or from the system setting. Contrast ratios
+   are against --paper. Screens only: print always uses the light look. */
+@media screen {
+  html[data-theme="dark"] body#promoArticleMain {
+    --paper: #061a22;
+    --surface: #0c2631;
+    --ink: #eaf2f4;            /* 15.7:1 */
+    --ink-2: #bccad0;          /* 10.6:1 */
+    --ink-3: #8fa4ac;          /* 6.9:1 */
+    --rule: #1f3c48;
+    --track: #2a4855;
+    --data: #5cb8ec;           /* brand teal, lifted for dark: 8.4:1 */
+    --data-soft: #0f3646;
+    --signal: #ffc340;
+    --accent: #f58f1b;
+    --risk: #f2a65a;           /* 8.8:1 */
+    --inverse: #eaf2f4;
+    --on-inverse: #072435;
+    --chrome: #020e13;
+    --mat: #e7eef0;            /* softer than white, so matted images don't glare */
+    color-scheme: dark;
+  }
+}
+/* Reading option: Literata for long reads, switched on per page with the setting
+   readingFont: "serif" (the loader sets html[data-reading-font] before the page draws). */
+html[data-reading-font="serif"] body#promoArticleMain {
+  --f-body: "Literata", Georgia, "Times New Roman", serif;
+  --t-body: 18px; --lh-body: 1.7;
+}
+html:has(body#promoArticleMain) { scroll-behavior: smooth; }
+/* Motion: readers who ask for less motion get none, across the whole article,
+   the site's own animations included. Everything that moves sits behind this. */
+@media (prefers-reduced-motion: reduce) {
+  html:has(body#promoArticleMain) { scroll-behavior: auto; }
+  body#promoArticleMain *, body#promoArticleMain *::before, body#promoArticleMain *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; transition-delay: 0s !important;
+  }
+}
+/* A one-time rise as findings and profile cards scroll in. Scroll-driven, no script;
+   cards are never hidden, they only move 18px, so the page is complete at rest. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ :is(h3, ul):where(:not(#section---KeyFindings ~ h2 ~ *)),
+    body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) {
+      animation: sc-rise linear both; animation-timeline: view(); animation-range: entry 0% entry 60%;
+    }
+  }
+}
+@keyframes sc-rise { from { translate: 0 18px; } to { translate: none; } }
+/* page scrollbar in the brand neutrals (Chrome, Edge, Firefox; Safari keeps its overlay scrollbar).
+   The thumb is 3:1 against the track, the WCAG minimum for controls. */
+html:has(body#promoArticleMain) { scrollbar-color: #758a93 #e9eef0; }
+@media screen { html[data-theme="dark"]:has(body#promoArticleMain) { scrollbar-color: #4f727f #061a22; } }
+body#promoArticleMain ::selection { background: var(--signal); color: var(--ink); }
+
+/* -------------------------------------------------------------------------
+   2. PAGE FRAME AND SITE CHROME
+   ------------------------------------------------------------------------- */
+/* Let the paper run edge to edge (the site paints a white 1400px sheet). */
+body#promoArticleMain #mainContainer { background: transparent; margin-inline: 0; width: auto; max-width: none; padding-inline: 0; }
+/* The site caps #hub at 1400px and centres it with auto margins. Keep it full width so the
+   article grid centres itself on any screen (a left-aligned 1400px box shifted the article left). */
+body#promoArticleMain #hub { background: transparent; padding: 0; margin: 0 auto; width: auto; max-width: none; }
+body#promoArticleMain #hub .hub-content-container { background: transparent; padding: 0 0 88px; }
+
+/* Calmer header: one hairline instead of a 5px band and shadow. */
+body#promoArticleMain nav.study-nav { border-bottom: 1px solid var(--rule); box-shadow: none; }
+
+/* Support tab: on-palette; becomes a pill below 1100px so it never covers text. */
+body#promoArticleMain #supportButton {
+  background: var(--inverse); color: var(--on-inverse);
+  font: 600 12px/1 var(--f-display); letter-spacing: .02em;
+  border: 0;
+}
+body#promoArticleMain #supportButton:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+@media (max-width: 1279.9px) {
+  body#promoArticleMain #supportButton {
+    transform: none; top: auto; right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    padding: 10px 14px; border-radius: 999px;
+    box-shadow: 0 8px 24px -10px rgb(7 36 48 / .55);
+  }
+}
+
+/* Footer closes on the same ink as the article. */
+body#promoArticleMain footer#footer { background: var(--chrome); }
+
+/* Reading progress, scroll-driven, no JS (Chrome/Edge/Safari 26+; others ignore). */
+@supports (animation-timeline: view()) {
+  body#promoArticleMain { timeline-scope: --article; }
+  body#promoArticleMain #hub #hub-content { view-timeline: --article block; }
+  body#promoArticleMain #hub #hub-content::before {
+    content: "";
+    position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 1100;
+    background: var(--signal);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    animation: sc-progress linear both;
+    animation-timeline: --article;
+    animation-range: contain 0% contain 100%;
+    pointer-events: none;
+  }
+}
+@keyframes sc-progress { to { transform: scaleX(1); } }
+
+/* -------------------------------------------------------------------------
+   3. HEADER: crumb, title, dek, byline, and the "of every 100" cover art
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub .hub-content-container {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [hero-start] minmax(0, var(--wide)) [hero-end]
+    minmax(var(--gutter), 1fr) [full-end];
+  grid-template-rows: auto auto auto auto 1fr auto;
+}
+body#promoArticleMain #hub .hub-content-container > * { grid-column: hero; min-width: 0; }
+body#promoArticleMain #hub .hub-content-container > .pageNavigation { grid-row: 1; padding-top: 56px; margin: 0; }
+body#promoArticleMain #hub .hub-content-container > h1 { grid-row: 2; }
+body#promoArticleMain #hub .hub-content-container > p.description { grid-row: 3; }
+body#promoArticleMain #hub .hub-content-container > #hub-content { grid-row: 6; grid-column: full; }
+
+/* crumb */
+body#promoArticleMain #hub .pageNavigation .crumb {
+  display: inline-flex; align-items: center; min-height: 24px;
+  font: 500 13px/1 var(--f-data); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-3); text-decoration: none;
+}
+body#promoArticleMain #hub .pageNavigation .crumb .icon-arrow-left { display: none; }
+body#promoArticleMain #hub .pageNavigation .crumb:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+body#promoArticleMain #hub .pageNavigation .crumb:focus-visible { outline: 2px solid var(--data); outline-offset: 3px; border-radius: 2px; }
+body#promoArticleMain #hub .pageNavigation .enh-l-crumb {
+  margin-left: 10px;
+  font: 500 13px/1 var(--f-data); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* title */
+body#promoArticleMain #hub .hub-content-container > h1 {
+  margin: 20px 0 0;
+  font: 700 clamp(32px, 2.1vw + 17px, 48px)/1.1 var(--f-title);
+  letter-spacing: -.03em;
+  word-spacing: .02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* dek */
+body#promoArticleMain #hub .hub-content-container > p.description {
+  margin: 22px 0 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+  max-width: 34em;
+  font: 400 clamp(18px, .5vw + 16px, 21px)/1.55 var(--f-body);
+  font-style: normal;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+body#promoArticleMain #hub .hub-content-container > p.description :is(i, em) { font-style: normal; }
+
+/* byline: added from page settings by the labels component */
+body#promoArticleMain #hub .hub-content-container > p.description .enh-l-byline {
+  display: block; margin-top: 22px;
+  font: 400 13px/1.7 var(--f-data); color: var(--ink-3);
+}
+body#promoArticleMain #hub p.description .enh-l-byline .enh-l-part + .enh-l-part::before { content: "\00a0\00a0\00b7\00a0\00a0" / ""; }
+
+/* hero closes with a hairline */
+body#promoArticleMain #hub .hub-content-container > #hub-content { margin-top: 48px; border-top: 1px solid var(--rule); }
+
+/* The cover chart is drawn by the stat-waffle component from the article's own sentences;
+   its placement in the header grid is in enhance/research-hub-placement.css. */
+@media (max-width: 767.9px) {
+  body#promoArticleMain #hub .hub-content-container > .pageNavigation { padding-top: 28px; }
+  body#promoArticleMain #hub .hub-content-container > h1 { margin-top: 14px; letter-spacing: -.025em; }
+  body#promoArticleMain #hub p.description .enh-l-byline .enh-l-part { display: block; }
+  body#promoArticleMain #hub p.description .enh-l-byline .enh-l-part + .enh-l-part::before { content: none; }
+  body#promoArticleMain #hub .hub-content-container > #hub-content { margin-top: 36px; }
+}
+
+/* -------------------------------------------------------------------------
+   4. ARTICLE GRID AND RHYTHM
+   One reading column (680) inside a wide column (880). Chapter heads,
+   charts and key findings use the wide column; phones go full bleed.
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [wide-start] minmax(0, calc((var(--wide) - var(--measure)) / 2))
+    [content-start] min(var(--measure), 100% - 2 * var(--gutter)) [content-end]
+    minmax(0, calc((var(--wide) - var(--measure)) / 2)) [wide-end]
+    minmax(var(--gutter), 1fr) [full-end];
+  padding: 0;
+  font: 400 var(--t-body)/var(--lh-body) var(--f-body);
+  color: var(--ink-2);
+  counter-reset: chapter skill principle;
+}
+body#promoArticleMain #hub #hub-content > * { grid-column: content; min-width: 0; margin: 0; padding: 0; }
+body#promoArticleMain #hub #hub-content > p:empty { display: none; }
+
+/* text */
+body#promoArticleMain #hub #hub-content > p,
+body#promoArticleMain #hub #hub-content > :is(ul, ol) > li {
+  font: 400 var(--t-body)/var(--lh-body) var(--f-body);
+  color: var(--ink-2);
+  text-wrap: pretty;
+  font-kerning: normal;
+}
+body#promoArticleMain #hub #hub-content > p + p { margin-top: .9em; }
+body#promoArticleMain #hub #hub-content :is(b, strong) { color: var(--ink); font-weight: 600; }
+body#promoArticleMain #hub #hub-content > p > :is(i, em) { font-style: italic; }
+body#promoArticleMain #hub #hub-content a {
+  font: inherit; letter-spacing: inherit;
+  color: var(--data);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+}
+body#promoArticleMain #hub #hub-content a:hover { text-decoration-thickness: 2px; }
+body#promoArticleMain #hub #hub-content a:focus-visible { outline: 2px solid var(--data); outline-offset: 2px; border-radius: 2px; }
+@media (max-width: 767.9px) {
+  body#promoArticleMain #hub #hub-content > :is(p, ul > li) { hyphens: auto; -webkit-hyphens: auto; hyphenate-limit-chars: 7 3 3; }
+}
+
+/* lists */
+body#promoArticleMain #hub #hub-content > :is(ul, ol) { list-style: none; }
+body#promoArticleMain #hub #hub-content > ul { margin-top: .7em; }
+body#promoArticleMain #hub #hub-content > ul > li { position: relative; padding-left: 24px; }
+body#promoArticleMain #hub #hub-content > ul > li + li { margin-top: .45em; }
+body#promoArticleMain #hub #hub-content > ul > li::before {
+  content: "";
+  position: absolute; left: 3px; top: calc(var(--lh-body) * .5em - 3px);
+  width: 6px; height: 6px;
+  background: var(--ink);
+}
+body#promoArticleMain #hub #hub-content > ul + p { margin-top: 1em; }
+
+/* subheads ("1.1 ...") */
+body#promoArticleMain #hub #hub-content > h3 {
+  margin-top: 52px;
+  font: 700 var(--t-h3)/1.25 var(--f-display);
+  letter-spacing: -.012em;
+  color: var(--ink);
+  text-wrap: balance;
+  scroll-margin-top: 24px;
+}
+body#promoArticleMain #hub #hub-content > h3 + :is(p, ul) { margin-top: 12px; }
+
+/* chapter openers: "Section N: Title" -> a "Section N" kicker over the title.
+   The literal "Section N: " prefix is clipped with a negative text-indent
+   (measured for Inter 800, -.025em). If a heading is renamed
+   without the prefix, its ID changes and these rules stop applying. */
+body#promoArticleMain #hub #hub-content > h2 {
+  grid-column: wide;
+  margin-top: var(--sp-chapter);
+  padding-top: 20px;
+  border-top: 2px solid var(--ink);
+  font: 800 var(--t-h2)/1.08 var(--f-display);
+  letter-spacing: -.025em;
+  color: var(--ink);
+  text-wrap: balance;
+  scroll-margin-top: 24px;
+}
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section"] {
+  counter-increment: chapter;
+  position: relative;
+  overflow: hidden;
+  padding: calc(20px + 15px + 16px) max(0px, 100% - 19em) .12em 0;
+  text-indent: -4.93em;
+}
+/* width of "Section N: " in Inter 800 at -.025em, measured per digit */
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section1"] { text-indent: -4.732em; }
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section2"] { text-indent: -4.928em; }
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section3"] { text-indent: -4.947em; }
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section4"] { text-indent: -4.979em; }
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section5"] { text-indent: -4.924em; }
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section6"] { text-indent: -4.952em; }
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section"]::before {
+  content: "Section " counter(chapter) / "";
+  position: absolute; top: 20px; left: 0;
+  text-indent: 0;
+  font: 600 15px/1 var(--f-display);
+  letter-spacing: 0;
+  color: var(--data);
+}
+/* first words of a chapter read as its summary */
+body#promoArticleMain #hub #hub-content > h2 + h3 { margin-top: 36px; }
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section"] + p,
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section"] + h3 + p {
+  font-size: var(--t-lede);
+  line-height: 1.55;
+  color: var(--ink);
+}
+body#promoArticleMain #hub #hub-content > h2[id^="section---Section"] + p { margin-top: 22px; }
+
+/* -------------------------------------------------------------------------
+   5. KEY FINDINGS [PAGE]
+   The five flat h3 + ul pairs become a stat grid: a label cell, then
+   [f1][f2] / [f3][f4][f5]. The leading figure of each card is generated
+   (empty alt text) and appears verbatim in that finding's own bullets.
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > #section---KeyFindings {
+  margin-top: 56px; padding-top: 0; border-top: 0;
+  font: 800 clamp(30px, 2vw + 16px, 42px)/1.04 var(--f-display);
+  letter-spacing: -.028em;
+}
+body#promoArticleMain #hub #hub-content > #section---KeyFindings .enh-l-kicker {
+  display: block; margin-bottom: 12px;
+  font: 600 15px/1 var(--f-display); letter-spacing: 0;
+  color: var(--data);
+}
+body#promoArticleMain #hub #hub-content > #section---KeyFindings .enh-l-dek {
+  display: block; margin-top: 14px; max-width: 22ch;
+  font: 400 18px/1.5 var(--f-body); letter-spacing: 0;
+  color: var(--ink-2);
+}
+body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ :is(h3, ul):where(:not(#section---KeyFindings ~ h2 ~ *)) {
+  grid-column: wide;
+  margin: 0;
+}
+body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ h3:where(:not(#section---KeyFindings ~ h2 ~ *)) {
+  padding-top: 26px;
+  border-top: 1px solid var(--rule);
+  font-size: 20px;
+  line-height: 1.28;
+  margin-top: 28px;
+}
+body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ h3:where(:not(#section---KeyFindings ~ h2 ~ *)) .enh-figure {
+  display: table;
+  margin-bottom: 12px;
+  font: 700 46px/1 var(--f-title);
+  letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 .enh-figure { box-shadow: inset 0 -.24em 0 var(--signal); }
+body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ ul:where(:not(#section---KeyFindings ~ h2 ~ *)) { padding: 12px 0 4px; }
+body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ ul:where(:not(#section---KeyFindings ~ h2 ~ *)) > li {
+  font-size: 15.5px; line-height: 1.55; padding-left: 18px;
+}
+body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ ul:where(:not(#section---KeyFindings ~ h2 ~ *)) > li + li { margin-top: 8px; }
+body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ ul:where(:not(#section---KeyFindings ~ h2 ~ *)) > li::before {
+  width: 5px; height: 5px; left: 1px; top: calc(1.55 * .5em - 2.5px); background: var(--ink-3); border-radius: 50%;
+}
+
+@media (min-width: 1280px) {
+  body#promoArticleMain #hub #hub-content { padding-top: 16px; }
+  body#promoArticleMain #hub .hub-content-container:has(#section---KeyFindings) > #hub-content { border-top: 0; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings { margin-top: 0; }
+  body#promoArticleMain #hub #hub-content {
+    grid-template-columns:
+      [full-start] minmax(var(--gutter), 1fr)
+      [wide-start k1-start] 100px
+      [content-start] 193.333px
+      [k1-end k2-start] 293.334px
+      [k2-end k3-start] 193.333px
+      [content-end] 100px
+      [wide-end k3-end] minmax(var(--gutter), 1fr) [full-end];
+  }
+  /* order puts the findings first; everything else keeps DOM order */
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings { grid-column: k1; grid-row: span 2; order: -20; padding: 28px 28px 0 0; border-top: 1px solid var(--rule); }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ :is(h3, ul):where(:not(#section---KeyFindings ~ h2 ~ *)) { padding-inline: 28px; border-left: 1px solid var(--rule); }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ h3:where(:not(#section---KeyFindings ~ h2 ~ *)) { margin-top: 0; padding-top: 28px; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ ul:where(:not(#section---KeyFindings ~ h2 ~ *)) { padding-bottom: 32px; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 { grid-column: k2; order: -19; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 { grid-column: k3; order: -18; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul { grid-column: k2; order: -17; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul { grid-column: k3; order: -16; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 { grid-column: k1; order: -15; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul + h3 { grid-column: k2; order: -14; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul + h3 + ul + h3 { grid-column: k3; order: -13; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul { grid-column: k1; order: -12; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul + h3 + ul { grid-column: k2; order: -11; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul + h3 + ul + h3 + ul { grid-column: k3; order: -10; }
+  /* first column of row 2 has no left rule; row 2 closes with a bottom rule */
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3,
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul { border-left: 0; padding-left: 0; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul,
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul + h3 + ul,
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 + ul + h3 + ul + h3 + ul { border-bottom: 1px solid var(--rule); }
+  /* the video follows the findings */
+  body#promoArticleMain #hub #hub-content > div:has(> :is(iframe, .enh-video)) { order: -5; }
+}
+@media (min-width: 1280px) {
+  /* thirds of 1080 for the findings; wide (880) and content (680) stay centred */
+  body#promoArticleMain #hub #hub-content {
+    grid-template-columns:
+      [full-start] minmax(var(--gutter), 1fr)
+      [k1-start] 100px
+      [wide-start] 100px
+      [content-start] 160px
+      [k1-end k2-start] 360px
+      [k2-end k3-start] 160px
+      [content-end] 100px
+      [wide-end] 100px
+      [k3-end] minmax(var(--gutter), 1fr) [full-end];
+  }
+}
+
+/* -------------------------------------------------------------------------
+   6. VIDEO
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > div:has(> :is(iframe, .enh-video)) {
+  display: block !important;          /* wrapper has inline display:flex */
+  grid-column: wide;
+  margin-top: 64px;
+}
+body#promoArticleMain #hub #hub-content > div:has(> :is(iframe, .enh-video)) > .enh-l-video {
+  display: block; margin-bottom: 12px;
+  font: 600 15px/1 var(--f-display); color: var(--ink);
+}
+body#promoArticleMain #hub #hub-content > div > iframe {
+  display: block; width: 100%; height: auto; aspect-ratio: 16 / 9;
+  border: 0; border-radius: 12px; background-color: #06141a;
+}
+body#promoArticleMain #hub #hub-content > div:has(> :is(iframe, .enh-video)):focus-within > iframe { outline: 3px solid var(--signal); outline-offset: 3px; }
+@media (max-width: 1279.9px) {
+  /* stacked layout: findings first, then the video */
+  body#promoArticleMain #hub #hub-content:has(> #section---KeyFindings) > div:has(> :is(iframe, .enh-video)) { order: 1; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ h2,
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ h2 ~ * { order: 2; }
+}
+
+/* -------------------------------------------------------------------------
+   7. FIGURES: chart images, quote graphics, pull stats
+   The wiki wraps every image in a one-cell table. The PNG already is a
+   finished panel, so there is no card: just a hairline and soft corners.
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > table.imageplugin--align,
+body#promoArticleMain #hub #hub-content > table.imageplugin--align :is(tbody, tr) { display: block; }
+body#promoArticleMain #hub #hub-content > table.imageplugin--align {
+  grid-column: wide;
+  width: auto !important; max-width: none;       /* inline style + site 50% cap */
+  margin: 40px 0 44px !important;
+  border: 0; background: none;
+}
+body#promoArticleMain #hub #hub-content > table.imageplugin--align td {
+  display: flow-root;
+  padding: 0; border: 0; min-width: 0;
+  border-radius: 8px; overflow: hidden;
+  box-shadow: 0 0 0 1px var(--rule);
+}
+body#promoArticleMain #hub #hub-content > table.imageplugin--align img {
+  display: block; width: 100%; max-width: none; height: auto;
+}
+/* each chart PNG ends in a 128px band of decorative dots; trim most of it */
+body#promoArticleMain #hub #hub-content > table.imageplugin--align img[src*="fig"]:not([src*="_quote"]) { margin-bottom: calc(-92 / 1400 * 100%); }
+/* reserve space before images load (no layout shift) */
+body#promoArticleMain #hub #hub-content img[src*="fig1-"]  { aspect-ratio: 1400 / 1326; }
+body#promoArticleMain #hub #hub-content img[src*="fig2-"]  { aspect-ratio: 1400 / 890; }
+body#promoArticleMain #hub #hub-content img[src*="fig3-"]  { aspect-ratio: 1400 / 1262; }
+body#promoArticleMain #hub #hub-content img[src*="fig4-"]  { aspect-ratio: 1400 / 1010; }
+body#promoArticleMain #hub #hub-content img[src*="fig5-"]  { aspect-ratio: 1400 / 1322; }
+body#promoArticleMain #hub #hub-content img[src*="fig6-"]  { aspect-ratio: 1400 / 1066; }
+body#promoArticleMain #hub #hub-content img[src*="fig7-"]  { aspect-ratio: 1400 / 1274; }
+body#promoArticleMain #hub #hub-content img[src*="fig8-"]  { aspect-ratio: 1400 / 1138; }
+body#promoArticleMain #hub #hub-content img[src*="fig9-"]  { aspect-ratio: 1400 / 1022; }
+body#promoArticleMain #hub #hub-content img[src*="fig10-"] { aspect-ratio: 1400 / 1074; }
+body#promoArticleMain #hub #hub-content img[src*="fig11-"] { aspect-ratio: 1400 / 1262; }
+body#promoArticleMain #hub #hub-content img[src*="fig12-"] { aspect-ratio: 1400 / 1304; }
+body#promoArticleMain #hub #hub-content img[src*="fig13-"] { aspect-ratio: 1400 / 1154; }
+body#promoArticleMain #hub #hub-content img[src*="_quote"] { aspect-ratio: 1874 / 781; }
+
+/* quote graphics: an aside in the reading column, never mistaken for a chart */
+body#promoArticleMain #hub #hub-content > table.imageplugin--align:has(img[src*="_quote"]) { grid-column: content; margin: 48px 0 !important; }
+body#promoArticleMain #hub #hub-content > table.imageplugin--align:has(img[src*="_quote"]) td { border-radius: 12px; box-shadow: none; }
+
+/* pull stat (wiki shaded box): a statement bound by an ink rule */
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:not(:has(tr + tr)) {
+  margin: 48px 0 0;
+  padding-top: 18px;
+  border: 0;
+  border-top: 2px solid var(--ink);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  overflow: visible;
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:not(:has(tr + tr)) :is(.tablesort-container, table, tbody, tr, td) {
+  display: block; width: auto; max-height: none; min-width: 0;
+  margin: 0; padding: 0; border: 0; background: none; box-shadow: none; overflow: visible;
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:not(:has(tr + tr)) td {
+  font: 700 clamp(22px, 1.4vw + 14px, 30px)/1.22 var(--f-display);
+  letter-spacing: -.018em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 26ch;
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:not(:has(tr + tr)) td :is(i, b) { font: inherit; color: inherit; }
+/* a pull stat that introduces a chart sits tight on it */
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:not(:has(tr + tr)) + p:empty + table.imageplugin--align { margin-top: 24px !important; }
+
+/* phones: charts and quotes go edge to edge, and the PNG's own 64px side padding is cropped */
+@media (max-width: 767.9px) {
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align { grid-column: full; margin: 32px 0 36px !important; }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align td { border-radius: 0; box-shadow: 0 -1px 0 var(--rule), 0 1px 0 var(--rule); }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align img[src*="fig"]:not([src*="_quote"]) {
+    width: calc(1400 / 1272 * 100%);
+    margin-left: calc(-64 / 1272 * 100%);
+    margin-bottom: calc(-92 / 1272 * 100%);
+  }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align:has(img[src*="_quote"]) { grid-column: full; margin: 36px 0 !important; }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align:has(img[src*="_quote"]) td { border-radius: 0; box-shadow: none; }
+  /* the densest diagram pans instead of shrinking */
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align:has(img[src*="fig13-"]) { position: relative; }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align:has(img[src*="fig13-"]) td {
+    overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin;
+  }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align img[src*="fig13-"] {
+    width: 720px; margin: 0 0 calc(-92 / 1400 * 720px);
+  }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align:has(img[src*="fig13-"])::after {
+    content: "Swipe \2192" / "Scroll sideways to see the full figure";
+    position: absolute; right: 10px; bottom: 10px;
+    padding: 5px 9px; border-radius: 999px;
+    background: var(--inverse); color: var(--on-inverse);
+    font: 500 11px/1 var(--f-data); letter-spacing: .04em;
+    pointer-events: none;
+  }
+  body#promoArticleMain #hub #hub-content > .tablesort-overflow:not(:has(tr + tr)) { margin-top: 40px; }
+}
+
+/* compare strip [PAGE]: the two "fully prepared vs basic only" lists after Fig. 3 */
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p,
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p {
+  margin-top: 28px;
+  font: 600 16px/1.4 var(--f-display);
+  color: var(--ink);
+}
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul,
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  margin-top: 10px;
+  border-top: 2px solid var(--ink);
+}
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul > li,
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul > li {
+  margin: 0; padding: 16px 18px 18px 0;
+  font-size: 15.5px; line-height: 1.45;
+}
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul > li + li,
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul > li + li { padding-left: 18px; border-left: 1px solid var(--rule); }
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul > li::before,
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul > li::before { display: none; }
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul > li > b:first-child,
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul > li > b:first-child {
+  display: table; margin-bottom: 8px;
+  font: 700 38px/1 var(--f-title); letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul > li > b:first-child { box-shadow: inset 0 -.24em 0 var(--signal); }
+body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul > li > b:first-child { color: var(--risk); }
+@media (max-width: 520px) {
+  body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul,
+  body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul { grid-template-columns: 1fr; }
+  body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul > li + li,
+  body#promoArticleMain #hub #hub-content > table:has(img[src*="fig3-"]) + p + p + p + p + ul + p + ul > li + li { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+}
+
+/* -------------------------------------------------------------------------
+   8. WORKER PROFILES [5.1]: the header p (<b>Profile N</b> <i>tagline</i>),
+   its list, and the paragraphs after it form one card with a level meter.
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) { --lv: 1; }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) ~ p:has(> b:first-child + i):has(+ ul) { --lv: 2; }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) ~ p:has(> b:first-child + i):has(+ ul) ~ p:has(> b:first-child + i):has(+ ul) { --lv: 3; }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) ~ p:has(> b:first-child + i):has(+ ul) ~ p:has(> b:first-child + i):has(+ ul) ~ p:has(> b:first-child + i):has(+ ul) { --lv: 4; }
+
+/* every part of a card: header p, its ul, and following p's until the next profile or heading */
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul),
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul)
+  ~ :is(ul, p:not(:has(> b:first-child + i))):not(p:has(> b:first-child + i):has(+ ul) ~ :is(h2, h3) ~ *) {
+  grid-column: content;
+  margin: 0;
+  padding-inline: clamp(18px, 3vw, 30px);
+  background: var(--surface);
+  border-inline: 1px solid var(--rule);
+  box-shadow: 0 1px 0 var(--surface);   /* covers hairline seams at fractional DPR */
+}
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) {
+  margin-top: 20px;
+  padding-top: 26px; padding-bottom: 12px;
+  border-top: 1px solid var(--rule);
+  border-radius: 14px 14px 0 0;
+  font-size: 0;                         /* swallow the space text node between b and i */
+}
+body#promoArticleMain #hub #hub-content > #section---5\.1FourEmployeeProfiles + p { margin-top: 16px; }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul)::before {
+  content: "";
+  display: block;
+  width: 65px; height: 5px; margin-bottom: 16px;
+  background: linear-gradient(90deg, var(--ink) calc(var(--lv) * 17px), var(--track) 0);
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 17px);
+          mask: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 17px);
+}
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) > b {
+  display: block; margin-bottom: 6px;
+  font: 800 clamp(21px, 1vw + 15px, 25px)/1.15 var(--f-display);
+  letter-spacing: -.02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+/* paint over the trailing ":" of "Profile 1: The AI Beginner:" */
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) > b::after {
+  content: "";
+  display: inline-block; width: .32em; height: 1em; margin-left: -.32em;
+  vertical-align: -.1em; background: var(--surface);
+}
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) > i {
+  display: block; max-width: 52ch;
+  font: italic 400 16.5px/1.5 var(--f-body);
+  color: var(--ink-2);
+}
+/* the facts list: hairline rows, no bullets */
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul { margin: 0; padding-top: 6px; padding-bottom: 16px; }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul > li {
+  margin: 0; padding: 9px 0 9px 0;
+  font-size: 15.5px; line-height: 1.5;
+  border-top: 1px solid var(--rule);
+}
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul > li::before { display: none; }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul > li:first-child { color: var(--ink); }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul > li:nth-child(4):last-child {
+  font: 500 13.5px/1.5 var(--f-data); color: var(--ink-3);
+}
+/* the interpretation that follows becomes the card's training priority */
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul)
+  ~ p:not(:has(> b:first-child + i)):not(p:has(> b:first-child + i):has(+ ul) ~ :is(h2, h3) ~ *) {
+  padding-left: calc(clamp(18px, 3vw, 30px) + 16px);
+  padding-bottom: 10px;
+  font: 500 16px/1.55 var(--f-display);
+  color: var(--ink);
+  background:
+    linear-gradient(var(--signal) 0 0) clamp(18px, 3vw, 30px) 0 / 3px 100% no-repeat,
+    var(--surface);
+}
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul + p { padding-top: 4px; }
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul + p > .enh-l-priority {
+  display: block; margin: 0 0 8px -16px;
+  font: 600 11.5px/1 var(--f-data); letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--surface);
+  padding-bottom: 2px;
+}
+
+/* card bottom: the part followed by the next profile or a heading */
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul)
+  ~ :is(ul, p):is(:has(+ p > b:first-child + i), :has(+ :is(h2, h3))):not(p:has(> b:first-child + i):has(+ ul) ~ :is(h2, h3) ~ *) {
+  margin-bottom: 20px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0 0 14px 14px;
+  box-shadow: none;
+}
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul)
+  ~ p:is(:has(+ p > b:first-child + i), :has(+ :is(h2, h3))):not(p:has(> b:first-child + i):has(+ ul) ~ :is(h2, h3) ~ *) {
+  background:
+    linear-gradient(var(--signal) 0 0) clamp(18px, 3vw, 30px) 0 / 3px calc(100% - 26px) no-repeat,
+    var(--surface);
+}
+
+/* yellow bar geometry: starts under the "Training priority" label, stops above the card's bottom padding */
+/* (!important: the general card-part selectors above carry heavy :has() specificity) */
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul + p {
+  background:
+    linear-gradient(var(--signal) 0 0) clamp(18px, 3vw, 30px) 28px / 3px calc(100% - 28px) no-repeat,
+    var(--surface) !important;
+}
+body#promoArticleMain #hub #hub-content > p:has(> b:first-child + i):has(+ ul) + ul + p:is(:has(+ p > b:first-child + i), :has(+ :is(h2, h3))) {
+  background:
+    linear-gradient(var(--signal) 0 0) clamp(18px, 3vw, 30px) 28px / 3px calc(100% - 54px) no-repeat,
+    var(--surface) !important;
+}
+
+/* -------------------------------------------------------------------------
+   9. SKILLS [5.2] (the only ol): hairline 2 x 2 grid
+   Items read "<b>Label</b>: text". The label floats on its own line and a
+   negative indent pulls the leftover ": " out of view.
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > ol {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px;
+  margin-top: 18px;
+  border-top: 1px solid var(--ink);
+  background: linear-gradient(var(--rule) 0 0) 50% 0 / 1px 100% no-repeat;
+}
+body#promoArticleMain #hub #hub-content > ol > li {
+  counter-increment: skill;
+  padding: 18px 0 20px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 15.5px; line-height: 1.55;
+  overflow-x: clip;
+  text-indent: -.5em;
+}
+body#promoArticleMain #hub #hub-content > ol > li > b:first-child {
+  float: left; width: calc(100% + 1em); padding-right: 1em; box-sizing: border-box;
+  text-indent: 0; margin-bottom: 6px;
+  font: 700 18px/1.3 var(--f-display); color: var(--ink);
+}
+body#promoArticleMain #hub #hub-content > ol > li > b:first-child::before {
+  content: counter(skill, decimal-leading-zero) / "";
+  display: block; margin-bottom: 10px;
+  font: 500 12px/1 var(--f-data); color: var(--ink-3);
+}
+@media (max-width: 767.9px) {
+  body#promoArticleMain #hub #hub-content > ol { grid-template-columns: 1fr; background: none; }
+}
+
+/* -------------------------------------------------------------------------
+   10. PRINCIPLES [5.3, PAGE]: a ruled, numbered list
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > #section---5\.3PrinciplesForEffectiveAITraining + p + ul {
+  margin-top: 14px;
+  border-top: 1px solid var(--ink);
+}
+body#promoArticleMain #hub #hub-content > #section---5\.3PrinciplesForEffectiveAITraining + p + ul > li {
+  counter-increment: principle;
+  margin: 0;
+  padding: 16px 0 16px 46px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 16px; line-height: 1.55;
+  overflow-x: clip;
+  text-indent: -.5em;
+}
+body#promoArticleMain #hub #hub-content > #section---5\.3PrinciplesForEffectiveAITraining + p + ul > li::before {
+  content: counter(principle, decimal-leading-zero) / "";
+  position: absolute; left: 0; top: 19px;
+  width: auto; height: auto; background: none;
+  text-indent: 0;
+  font: 500 12px/1.4 var(--f-data); color: var(--ink-3);
+}
+body#promoArticleMain #hub #hub-content > #section---5\.3PrinciplesForEffectiveAITraining + p + ul > li > b:first-child {
+  float: left; width: calc(100% + 1em); padding-right: 1em; box-sizing: border-box;
+  text-indent: 0; margin-bottom: 3px;
+  font: 700 17px/1.3 var(--f-display); color: var(--ink);
+}
+
+/* -------------------------------------------------------------------------
+   11. CONCLUSION [Section 6, PAGE]: lede, the priorities statement, end mark
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > #section---Section6ConclusionAndPrioritiesForAction + p + p + p {
+  margin: 32px 0;
+  padding: 2px 0 2px 22px;
+  border-left: 4px solid var(--signal);
+  font: 700 clamp(21px, 1vw + 15px, 27px)/1.28 var(--f-display);
+  letter-spacing: -.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+body#promoArticleMain #hub #hub-content > #section---Section6ConclusionAndPrioritiesForAction + p + p + p + p::after {
+  content: "" / "";
+  display: inline-block; width: .5em; height: .5em; margin-left: .35em;
+  background: var(--signal);
+}
+
+/* -------------------------------------------------------------------------
+   12. BACK MATTER: methodology, references, about
+   ------------------------------------------------------------------------- */
+body#promoArticleMain #hub #hub-content > :is(#section---Methodology, #section---ExternalResearchReferenced, #section---AboutStudy\.com) {
+  grid-column: content;
+  font: 700 20px/1.3 var(--f-display);
+  letter-spacing: -.01em;
+  text-transform: none;
+  border-top: 1px solid var(--rule);
+  padding: 24px 0 0;
+  margin: 40px 0 10px;
+  overflow: visible;
+}
+body#promoArticleMain #hub #hub-content > #section---Methodology { margin-top: 96px; padding-top: 28px; border-top: 2px solid var(--ink); }
+body#promoArticleMain #hub #hub-content > :is(#section---Methodology, #section---ExternalResearchReferenced, #section---AboutStudy\.com) + p { margin-top: 0; }
+body#promoArticleMain #hub #hub-content > #section---Methodology ~ p { font-size: var(--t-small); line-height: 1.65; }
+body#promoArticleMain #hub #hub-content > #section---Methodology ~ p + p { margin-top: 12px; }
+body#promoArticleMain #hub #hub-content > #section---ExternalResearchReferenced + p {
+  font: 400 15px/1.6 var(--f-body);
+  padding-left: 1.5em; text-indent: -1.5em;
+  overflow-wrap: anywhere;
+}
+body#promoArticleMain #hub #hub-content > #section---AboutStudy\.com + p {
+  font: 400 14.5px/1.6 var(--f-display);
+  color: var(--ink-3);
+}
+
+/* methodology table: rules only */
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) {
+  margin: 20px 0 24px;
+  overflow-x: auto;
+  box-shadow: none;
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) :is(.tablesort-container, table) {
+  width: 100%; min-width: 0; max-height: none;
+  background: transparent; box-shadow: none; border: 0; border-radius: 0;
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) table { border-collapse: collapse; border-top: 1px solid var(--ink); }
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) tr { background: transparent; box-shadow: none; }
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) :is(th, td) {
+  min-width: 0; width: auto;
+  padding: 11px 18px 11px 0;
+  border: 0; border-bottom: 1px solid var(--rule);
+  background: transparent;
+  text-align: left; vertical-align: top;
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) th {
+  position: static;
+  font: 500 11.5px/1.3 var(--f-data); letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-3);
+  vertical-align: bottom;
+  cursor: default;
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) th * { color: inherit; font: inherit; }
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) th::after { display: none; }
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) th:nth-child(2) { text-transform: none; font-style: italic; letter-spacing: 0; font-size: 13px; }
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) td {
+  font: 400 15px/1.45 var(--f-display);
+  color: var(--ink-2);
+}
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) td:nth-child(2) { font-variant-numeric: tabular-nums; }
+body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) td:first-child { font-weight: 600; color: var(--ink); }
+@media (max-width: 767.9px) {
+  /* stack each row and reuse the wiki's own label="" attributes */
+  body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) :is(table, tbody, tr, td) { display: block; }
+  body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) tr:first-child { display: none; }
+  body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) tr { padding: 12px 0; border-bottom: 1px solid var(--rule); }
+  body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) td { padding: 2px 0; border: 0; }
+  body#promoArticleMain #hub #hub-content > .tablesort-overflow:has(tr + tr) td:not(:first-child)::before {
+    content: attr(label);
+    display: inline-block; width: 6em;
+    font: 500 11px/1 var(--f-data); letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   13. ACCESSIBILITY AND PRINT
+   ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html:has(body#promoArticleMain) { scroll-behavior: auto; }
+  body#promoArticleMain #hub #hub-content::before { display: none; }
+}
+@media (forced-colors: active) {
+  /* the drawn waffle is decoration made of backgrounds; hide it cleanly */
+  body#promoArticleMain #hub .hub-content-container::before,
+  body#promoArticleMain #hub .hub-content-container::after { display: none; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ h3::before { box-shadow: none; }
+}
+@page { margin: 16mm 18mm; }
+@media print {
+  body#promoArticleMain { background: #fff; --t-body: 11pt; --lh-body: 1.5; }
+  /* Bootstrap's print reset strips backgrounds, so drawn bullets and kickers go native */
+  body#promoArticleMain #hub #hub-content > ul { list-style: square outside; padding-left: 1.2em; }
+  body#promoArticleMain #hub #hub-content > ul > li { padding-left: 0; }
+  body#promoArticleMain #hub #hub-content > ul > li::before { display: none; }
+  body#promoArticleMain #hub #hub-content > h2[id^="section---Section"] { text-indent: 0; overflow: visible; padding: 8pt 0 0; }
+  body#promoArticleMain #hub #hub-content > h2[id^="section---Section"]::before { display: none; }
+  body#promoArticleMain #mainContainer, body#promoArticleMain #hub { padding: 0; margin: 0; }
+  body#promoArticleMain :is(nav.study-nav, footer#footer, #supportButton, .pageNavigation) { display: none !important; }
+  body#promoArticleMain #hub .hub-content-container::before,
+  body#promoArticleMain #hub .hub-content-container::after,
+  body#promoArticleMain #hub #hub-content::before,
+  body#promoArticleMain #hub #hub-content > div:has(> :is(iframe, .enh-video)) { display: none !important; }
+  body#promoArticleMain #hub .hub-content-container { display: block; padding: 0; }
+  body#promoArticleMain #hub .hub-content-container > h1 { font-size: 26pt; margin: 0; }
+  body#promoArticleMain #hub #hub-content { display: block; margin-top: 18pt; border-top: 1pt solid #000; }
+  body#promoArticleMain #hub #hub-content > * { order: 0 !important; }
+  body#promoArticleMain #hub #hub-content > :is(h2, h3) { break-after: avoid; }
+  body#promoArticleMain #hub #hub-content > h2 { margin-top: 24pt; font-size: 20pt; }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align { break-inside: avoid; margin: 12pt 0 !important; }
+  body#promoArticleMain #hub #hub-content > table.imageplugin--align img { max-height: 8in; width: auto; max-width: 100%; margin: 0 auto !important; }
+  body#promoArticleMain #hub #hub-content > :is(.tablesort-overflow, ol, ul) { break-inside: avoid; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ :is(h3, ul):where(:not(#section---KeyFindings ~ h2 ~ *)) { border-left: 0; padding-inline: 0; }
+  body#promoArticleMain #hub #hub-content > #section---KeyFindings ~ ul:where(:not(#section---KeyFindings ~ h2 ~ *)) { padding-left: 1.2em; }
+}

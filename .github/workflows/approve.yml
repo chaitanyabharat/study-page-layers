@@ -1,0 +1,57 @@
+# Approve a component without Python on your own machine: Actions → approve component → Run workflow.
+# Only repository admins can run it. The approval (reviewer name, date, fingerprint) is committed to main,
+# then the site is rebuilt and deployed.
+name: approve component
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: "Component name from page-layers/components/registry.json (e.g. newui)"
+        required: true
+      reviewer:
+        description: "Your name exactly as listed in page-layers/governance/people.json"
+        required: true
+      note:
+        description: "Why it's approved (kept in the registry)"
+        required: false
+        default: ""
+permissions:
+  contents: write
+  actions: write
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Only admins may approve
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          perm=$(gh api "repos/${{ github.repository }}/collaborators/${{ github.actor }}/permission" --jq .permission)
+          echo "${{ github.actor }} has $perm"
+          test "$perm" = "admin"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Approve
+        env:
+          COMPONENT: ${{ inputs.component }}
+          REVIEWER: ${{ inputs.reviewer }}
+          NOTE: ${{ inputs.note }}
+        run: python page-layers/tools/cli.py approve "$COMPONENT" --by "$REVIEWER" --note "$NOTE (approved by GitHub user ${{ github.actor }})"
+      - run: python page-layers/tools/cli.py check
+      - name: Commit the approval
+        env:
+          COMPONENT: ${{ inputs.component }}
+          REVIEWER: ${{ inputs.reviewer }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A page-layers
+          git commit -m "Approve component $COMPONENT (reviewer: $REVIEWER, run by ${{ github.actor }})"
+          git push
+      - name: Deploy (pushes made by this workflow don't start other workflows on their own)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref main

@@ -1,0 +1,8 @@
+{
+  "cdn_base": "/cdn/",
+  "manifest_ttl_seconds": 300,
+  "budgets_kb_gzip": { "css": 24, "js": 30 },
+  "allowed_url_hosts": ["study.com", "www.study.com", "fonts.googleapis.com", "fonts.gstatic.com"],
+  "max_important": 40,
+  "exclude_paths": "^/(login|logout|signin|signup|register|checkout|cart|account|my-account|billing|payment)"
+}

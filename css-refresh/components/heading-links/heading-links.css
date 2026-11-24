@@ -1,0 +1,13 @@
+/* Styles for the heading-links component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body .enh-anchor { display: inline-grid; place-items: center; vertical-align: .08em; width: 1.15em; height: 1.15em; margin-left: .3em; font-size: .62em; color: var(--ink-3); text-decoration: none; border-radius: 6px; text-indent: 0; }
+html.enh:not(#enh) body .enh-anchor:hover { color: var(--ink); background: var(--rule); }
+@media (hover: hover) {
+  html.enh:not(#enh) body .enh-anchor { opacity: 0; transition: opacity .15s; }
+}
+@media (hover: hover) {
+  html.enh:not(#enh) body :is(h2, h3):is(:hover, :focus-within) > .enh-anchor { opacity: 1; }
+}
+@media (hover: none) {
+  html.enh:not(#enh) body .enh-anchor { display: none; }
+}

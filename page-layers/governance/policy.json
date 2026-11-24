@@ -1,0 +1,55 @@
+{
+  "_about": "The rules for page-layer JavaScript. Engineering signs these off once (python tools/cli.py policy-approve --by <engineer>); if anything under 'rules' changes without a new sign-off, nothing can be approved or published. In the GitHub version, CODEOWNERS gives this folder to engineering.",
+  "rules": {
+    "allowed_hosts": [
+      "study.com",
+      "*.study.com",
+      "i.ytimg.com",
+      "www.youtube.com",
+      "www.youtube-nocookie.com",
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+      "www.w3.org"
+    ],
+    "storage_prefixes": [
+      "study-",
+      "enh-",
+      "page-layers",
+      "pl-"
+    ],
+    "max_component_kb_gzip": 8,
+    "tiers": {
+      "_about": "A page is 'high' risk if its audience is members (most readers signed in) or a path matches high_paths. High-risk pages may only use components engineering has signed off; experiments never run there.",
+      "high_paths": [
+        "^/(academy|my|member|members|dashboard|settings|profile|learn|course-player|lesson|lessons|quiz|quizzes|exam|exams)(/|\\b)"
+      ]
+    },
+    "review": {
+      "two_people": true,
+      "roles_for": {
+        "low": [
+          "content-reviewer",
+          "engineering"
+        ],
+        "high": [
+          "engineering"
+        ],
+        "exceptions": [
+          "engineering"
+        ]
+      }
+    },
+    "experiment": {
+      "max_days": 30,
+      "max_share": 0.2,
+      "tiers": [
+        "low"
+      ]
+    }
+  },
+  "approval": {
+    "by": "eng-lead",
+    "on": "2026-10-16",
+    "sha256": "fcc8d07a81293b57fbea31b27e105657868e753a169463967377f25a80f3a740"
+  }
+}

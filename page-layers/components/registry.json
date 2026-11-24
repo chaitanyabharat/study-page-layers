@@ -1,0 +1,420 @@
+{
+  "_about": "The component library, in load order. Each component goes proposed -> experiment -> reviewed, signed by someone who isn't its author after the automatic scanner passes (python tools/cli.py approve). Publishing refuses a component whose files changed since review. 'needs' are added automatically. 'allow' lists exceptions to the rules, which need engineering. Each component's settings are documented at the top of its file.",
+  "newui": {
+    "file": "/css-refresh/newui/newui.js",
+    "about": "The New look switch, the Display panel and the color theme. Added automatically to pages with newLookSwitch on. Settings: newLook.",
+    "auto": true,
+    "size_kb_gzip": 7.8,
+    "author": "prototype",
+    "status": "reviewed",
+    "allow": {
+      "script-injection": "It is the New look loader: it adds the page's own reviewed component scripts, from the manifest and with integrity hashes, when the reader is on the new look."
+    },
+    "sha256": "476ae4e513e80545fa42e3389788f04fa00d0abb104d1a1f2212bab53956bb61",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-19",
+    "scan": {
+      "error": 0,
+      "warn": 4,
+      "info": 2
+    },
+    "acknowledged": [
+      "html-dynamic line 178",
+      "html-dynamic line 193",
+      "html-dynamic line 221",
+      "navigation line 347"
+    ],
+    "review_note": "Second page (College template): general fixes found by reusing the components"
+  },
+  "recolor": {
+    "file": "/css-refresh/theme/recolor.js",
+    "about": "Dark-mode chart recolor and its guardrails. Needed by dark-images.",
+    "size_kb_gzip": 3.1,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "9191038ad52df6f32abf5de35b619d7906e0af270579f434cae1ee966fca3a60",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "core": {
+    "file": "/css-refresh/components/core/core.js",
+    "css": "/css-refresh/components/core/core.css",
+    "about": "Shared base for the enhancement components: page model, helpers, default tokens. Added automatically. Settings: enhance.",
+    "size_kb_gzip": 6.6,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "1c0d031904ac002481e8c2c26554712b9e2ac2dbb63790c699208ceb0f99dbd4",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-19",
+    "scan": {
+      "error": 0,
+      "warn": 2,
+      "info": 0
+    },
+    "acknowledged": [
+      "html-dynamic line 62",
+      "html-dynamic line 98"
+    ],
+    "review_note": "Second page (College template): general fixes found by reusing the components"
+  },
+  "labels": {
+    "file": "/css-refresh/components/labels/labels.js",
+    "needs": [
+      "core"
+    ],
+    "author": "prototype",
+    "status": "reviewed",
+    "about": "Short labels and lines around the article (Summary, Video summary, a byline), set in page settings instead of CSS.",
+    "sha256": "8d2f644b164797d90ecdf26b736f1cf0fbd44a3c71743e64a373149908e47e9b",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-17",
+    "size_kb_gzip": 1.2,
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "Eureka alignment: palette, breakpoints, motion, labels out of CSS"
+  },
+  "summary-figures": {
+    "file": "/css-refresh/components/summary-figures/summary-figures.js",
+    "needs": [
+      "core"
+    ],
+    "author": "prototype",
+    "status": "reviewed",
+    "about": "Each summary finding is led by a big figure taken from its own text (first percentage; '9 in 10' = 90%).",
+    "sha256": "aeb7224d5f5b01185055362f43aed22bc5f3bb5d8f9ec1f7cdbd348b6cccb3e1",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-19",
+    "size_kb_gzip": 0.6,
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "Second page (College template): general fixes found by reusing the components"
+  },
+  "figures": {
+    "file": "/css-refresh/components/figures/figures.js",
+    "css": "/css-refresh/components/figures/figures.css",
+    "needs": [
+      "core"
+    ],
+    "about": "A caption under each figure from its alt text, and a full-screen viewer with zoom.",
+    "size_kb_gzip": 2.9,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "65e2b4cdfda4ce2be3cb846ea52401da5246cbdae908493bd5089f8dc5a39995",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-19",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "Second page (College template): general fixes found by reusing the components"
+  },
+  "figure-links": {
+    "file": "/css-refresh/components/figure-links/figure-links.js",
+    "css": "/css-refresh/components/figure-links/figure-links.css",
+    "needs": [
+      "core"
+    ],
+    "about": "\"(Fig. 3)\" in the text links to the figure and highlights it.",
+    "size_kb_gzip": 1.0,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "3d2f3cb3af35ff9155b94b238305754f4100295d7b7962e54766508dadb3e616",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "video": {
+    "file": "/css-refresh/components/video/video.js",
+    "css": "/css-refresh/components/video/video.css",
+    "needs": [
+      "core"
+    ],
+    "about": "YouTube embeds show a poster; the player loads only on play.",
+    "size_kb_gzip": 1.4,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "88b0beb0a38f692419b44643601999ee8e270faaaa48a2932e9d65adf9c91c43",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "stat-bars": {
+    "file": "/css-refresh/components/stat-bars/stat-bars.js",
+    "css": "/css-refresh/components/stat-bars/stat-bars.css",
+    "needs": [
+      "core"
+    ],
+    "about": "Lists whose items lead with a percentage get bars.",
+    "size_kb_gzip": 1.4,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "a6eda2cc3c41f35759d656cbdae18409c73009c5cb1e79ba83c27b50b78551b9",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "stat-waffle": {
+    "file": "/css-refresh/components/stat-waffle/stat-waffle.js",
+    "css": "/css-refresh/components/stat-waffle/stat-waffle.css",
+    "needs": [
+      "core"
+    ],
+    "about": "An interactive 'Of every 100 ...' chart from sentences in the article. Set up per page (title, where, views).",
+    "size_kb_gzip": 3.2,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "1ac5a00316b9f38f373da53740f9c6dd02bc78bfc4385a1ddaf3b66861938b4a",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-19",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "Contents: marker + progress, no track, no scrollbar; cover chart linked to findings, sticky card wrapper"
+  },
+  "copy-cite": {
+    "file": "/css-refresh/components/copy-cite/copy-cite.js",
+    "css": "/css-refresh/components/copy-cite/copy-cite.css",
+    "needs": [
+      "core"
+    ],
+    "about": "Copy buttons on summary findings and pull stats, with a source line and a deep link.",
+    "size_kb_gzip": 1.1,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "4ae7b00daa4b91b68c7c85ee6f15f324064a7bca5d8acb9ff0eb7988acaa1901",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-19",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "Second page (College template): general fixes found by reusing the components"
+  },
+  "heading-links": {
+    "file": "/css-refresh/components/heading-links/heading-links.js",
+    "css": "/css-refresh/components/heading-links/heading-links.css",
+    "needs": [
+      "core"
+    ],
+    "about": "A copy-link icon on each section heading.",
+    "size_kb_gzip": 0.8,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "eb30086db2a4b575979e525a69fd20f91e4723e3f7707d3378fbf5e539673ef9",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "profile-filter": {
+    "file": "/css-refresh/components/profile-filter/profile-filter.js",
+    "css": "/css-refresh/components/profile-filter/profile-filter.css",
+    "needs": [
+      "core"
+    ],
+    "about": "Buttons that filter profile cards ('Which one sounds like you?').",
+    "size_kb_gzip": 1.3,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "a4f5c4f1bd253db9cf3a2e1aa642464ba49adb5b98dda2335b07ce43d6b3a8ad",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "reference-links": {
+    "file": "/css-refresh/components/reference-links/reference-links.js",
+    "needs": [
+      "core"
+    ],
+    "about": "Plain-text web addresses in the references section become links.",
+    "size_kb_gzip": 0.7,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "4757a3f35b27b509c58826b4334e78cd25918de91ce997be6a7df4af15949656",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "contents": {
+    "file": "/css-refresh/components/contents/contents.js",
+    "css": "/css-refresh/components/contents/contents.css",
+    "needs": [
+      "core"
+    ],
+    "about": "Contents rail beside the article when it fits, or a Contents button and sheet. Reading time and section tracking.",
+    "size_kb_gzip": 5.0,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "aa8ed858e5dfbece04a4d46aa66fbec31008d25738e5d1789443b2bb0130e790",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-19",
+    "scan": {
+      "error": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "acknowledged": [],
+    "review_note": "Contents: marker + progress, no track, no scrollbar; cover chart linked to findings, sticky card wrapper"
+  },
+  "skim": {
+    "file": "/css-refresh/components/skim/skim.js",
+    "css": "/css-refresh/components/skim/skim.css",
+    "needs": [
+      "core"
+    ],
+    "about": "Skim mode: openers, charts and key stats only. Its switch joins the contents rail when that component is on.",
+    "size_kb_gzip": 2.3,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "7a37f23369e76cef59b8aef090960f9511a27c7fadc8d22d14123e84751b7631",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 2,
+      "info": 0
+    },
+    "acknowledged": [
+      "storage-dynamic line 35",
+      "storage-dynamic line 51"
+    ],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "footer-links": {
+    "file": "/css-refresh/components/footer-links/footer-links.js",
+    "css": "/css-refresh/components/footer-links/footer-links.css",
+    "about": "Compact two-line footer: popular links, 'All links' to show the full list in place, app badges always visible. Settings: footer (top links, label, logo).",
+    "size_kb_gzip": 2.7,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "9a9c2ebf0f1cf749ddf1e7a25ee82f457c88bf1a815d34a608be3bed921abc9a",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-10-16",
+    "scan": {
+      "error": 0,
+      "warn": 1,
+      "info": 0
+    },
+    "acknowledged": [
+      "html-dynamic line 58"
+    ],
+    "review_note": "initial library, reviewed at setup"
+  },
+  "dark-images": {
+    "file": "/css-refresh/theme/dark-images.js",
+    "about": "Per-image dark-mode treatment: prepared dark files, light mats, Show original. Settings: darkImages.",
+    "needs": [
+      "recolor"
+    ],
+    "size_kb_gzip": 5.0,
+    "author": "prototype",
+    "status": "reviewed",
+    "sha256": "360ab67038b44486c7095d896d59d6808de5a5164e995dac084c9a80301e5474",
+    "reviewed_by": "eng-lead",
+    "review_role": "engineering",
+    "engineering": true,
+    "reviewed_on": "2026-11-03",
+    "scan": {
+      "error": 0,
+      "warn": 3,
+      "info": 0
+    },
+    "acknowledged": [
+      "network-dynamic line 110",
+      "network-dynamic line 126",
+      "worker line 127"
+    ],
+    "review_note": "Eureka 2 nav (.cx-navigation): Display button placement with redraw recovery; late images in dark mode"
+  }
+}

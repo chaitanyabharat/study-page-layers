@@ -1,0 +1,397 @@
+/* =========================================================================
+   Site chrome: header and footer for the new look (prototype)
+   - Restyles the site's existing header and footer HTML. No markup changes:
+     the order of header items is set with CSS order, the footer columns with
+     CSS grid.
+   - One set of rules for both themes, driven by the article's color tokens
+     plus a few chrome tokens below.
+   - Scoped to body:is(#promoArticleMain, #cxPromoArticleMain), like the rest of the new look.
+   ========================================================================= */
+
+body:is(#promoArticleMain, #cxPromoArticleMain) {
+  --hdr-bg: #ffffff;          /* the rebrand header: solid white, a #f1f1f1 rule */
+  --hdr-line: #f1f1f1;
+  --hdr-hov: #eef3f5;
+  --field: #f1f4f5;
+  --field-line: #d0dee4;
+  --pop: #fff;
+  --pop-shadow: 0 18px 44px -12px rgb(7 36 48 / .3);
+  --ft-ink: #e6eef1;          /* footer links: 13.9:1 on the light theme's navy footer */
+  --ft-mut: #a9bdc4;          /* footer headings and small print: 8.2:1 */
+  --ft-line: rgb(255 255 255 / .12);
+}
+@media screen {
+  html[data-theme="dark"] body:is(#promoArticleMain, #cxPromoArticleMain) {
+    --hdr-bg: #0c2631;
+    --hdr-line: #1f3c48;
+    --hdr-hov: #143644;
+    --field: #0a2029;
+    --field-line: #2a4855;
+    --pop: #0c2631;
+    --pop-shadow: 0 18px 44px -12px rgb(0 0 0 / .7);
+  }
+}
+
+/* =========================================================================
+   HEADER
+   ========================================================================= */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav {
+  position: relative; z-index: 1000;
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-line); box-shadow: none; color: var(--ink);
+  font-family: var(--f-display);
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main,
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main > .container-fluid { background: transparent; border: 0; box-shadow: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main > .container-fluid {
+  display: flex; flex-wrap: wrap; align-items: center; column-gap: 8px; min-height: 76px; padding: 0 24px; width: auto; max-width: none;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main > .container-fluid::before,
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main > .container-fluid::after { display: none; }   /* Bootstrap clearfix */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__logo { float: none; order: 0; display: flex; align-items: center; height: 76px; padding: 0; margin: 0 10px 0 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__logo a { display: flex; align-items: center; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav img.breakthrough-logo { max-height: 34px !important; margin: 0 !important; width: auto; }
+
+/* site navigation */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #navsContainer { float: none; order: 1; background: transparent; border: 0; box-shadow: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav { display: flex; align-items: center; gap: 2px; margin: 0; padding: 0; background: transparent; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li { float: none; display: flex; align-items: center; height: 76px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > a {
+  display: inline-flex; align-items: center; gap: 4px; height: auto; padding: 9px 11px; margin: 0; border-radius: 10px;
+  font: 600 14px/1 var(--f-display); letter-spacing: 0; color: var(--ink); background: transparent; text-decoration: none; transition: background-color .15s;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > a:is(:hover, :focus-visible),
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li.open > a,
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > a[aria-expanded="true"] { background: var(--hdr-hov); color: var(--ink); }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(a, button, input):focus-visible { outline: 2px solid var(--data); outline-offset: 2px; }
+/* the site draws each dropdown caret as an absolutely placed triangle; use an inline chevron instead */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > a::after {
+  content: ""; position: static; display: inline-block; flex: none; width: 10px; height: 10px; margin: 1px 0 0; border: 0; background: currentColor; opacity: .65;
+  -webkit-mask: var(--chev) center / contain no-repeat; mask: var(--chev) center / contain no-repeat;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li.no-sub-nav > a::after { display: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav { --chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 9l7 7 7-7' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+
+/* menus that open from the navigation: ONE floating panel per level. The site
+   nests a framed list inside a framed container; only the outer one keeps a
+   frame. Second-level lists (ul.course-popout) keep the site's own show/hide
+   and position, and get the same panel look. */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > a:is(.dropdown-toggle, .collapsed, [aria-expanded]) { border: 0 !important; box-shadow: none !important; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav {
+  width: max-content !important; max-width: calc(100vw - 32px); min-width: 248px; margin-top: 6px; overflow: visible; padding: 8px !important; color: var(--ink);
+  background: var(--pop); border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--pop-shadow);
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.course-popout {
+  padding: 8px !important; color: var(--ink); background: var(--pop); border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--pop-shadow); list-style: none;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav :is(.nav-dropdown-2nd-level, .study-nav__sub-nav__section) {
+  float: none; width: auto; min-width: 0; margin: 0; padding: 0; background: transparent; border: 0; border-radius: 0; box-shadow: none;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav__section > ul { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; background: transparent; border: 0; box-shadow: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav__section > ul, ul.course-popout) > li { float: none; width: auto !important; margin: 0; padding: 0; background: transparent; border: 0; list-style: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav__section > ul, ul.course-popout) > li > a:not(.e2-button) {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: auto !important; padding: 9px 12px !important; margin: 0; border-radius: 10px; font: 500 14.5px/1.3 var(--f-display); color: var(--ink); text-decoration: none; background: transparent; white-space: nowrap;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav__section > ul, ul.course-popout) > li > a:not(.e2-button):is(:hover, :focus-visible),
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav__section > ul > li > a[aria-expanded="true"] { background: var(--hdr-hov); color: var(--ink); }
+/* the site's arrows: drop the ">" before plain links, keep a quiet chevron on items that open more */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav__section > ul, ul.course-popout) > li > a::before { display: none !important; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav__section > ul, ul.course-popout) > li > a::after { content: none !important; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav__section > ul > li.sub-sub-nav__popout-link > a::after {
+  content: "" !important; position: static; display: block; flex: none; width: 12px; height: 12px; margin: 0; border: 0; background: currentColor; opacity: .5; rotate: -90deg;
+  -webkit-mask: var(--chev) center / contain no-repeat; mask: var(--chev) center / contain no-repeat;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav__section > ul, ul.course-popout) > li > a :is(.icon, i, svg) { display: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav, ul.course-popout) hr { margin: 6px 4px; border: 0; border-top: 1px solid var(--rule); }
+/* closing links ("All Test Prep", "All Teacher Certification Test Prep") read as the panel's footer link */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav :is(.study-nav__sub-nav__section > ul, ul.course-popout) > li:last-child:not(.sub-sub-nav__popout-link):not(:has(.e2-button)) > a { margin-top: 4px; color: var(--data); font-weight: 600; }
+/* the "Earn credit" button inside a menu */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav .e2-button {
+  display: flex; justify-content: center; align-items: center; height: 40px; margin-top: 4px; padding: 0 14px; border: 0; border-radius: 10px;
+  font: 600 14px/1 var(--f-display); color: #072435; background: #ffc340; box-shadow: none; text-decoration: none;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav .e2-button:hover { background: #ffb21f; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__sub-nav .e2-button * { color: inherit; font: inherit; }
+/* Opening and closing. The site opens a menu while its item is hovered (CSS only). The panel
+   floats 6px below the bar, and a margin isn't part of the hover area, so on its own the menu
+   would close on the way down to it. Industry practice, in CSS:
+   1. no dead gap: an invisible bridge covers the space between the bar and the panel;
+   2. a grace period: a menu stays 250ms after the pointer leaves, so a diagonal move that clips
+      a corner doesn't close it; moving onto another item still switches at once;
+   3. keyboard: a menu is also open while focus is inside it. */
+@media (min-width: 992px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > .study-nav__sub-nav.popoutContainer {
+    display: grid; visibility: hidden !important; opacity: 0; translate: 0 -4px;   /* !important: the site sets visibility: visible !important */
+    transition: opacity .14s ease-out, translate .14s ease-out, visibility 0s linear .25s;
+  }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li:is(:hover, :focus-within) > .study-nav__sub-nav.popoutContainer {
+    visibility: visible !important; opacity: 1; translate: none; transition-delay: 0s;
+  }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav:has(> li:hover) > li:not(:hover) > .study-nav__sub-nav.popoutContainer {
+    visibility: hidden !important; opacity: 0; transition: none;
+  }
+  /* everything inside follows the panel: the site marks inner parts visibility: visible, which
+     would leave a hidden panel's links catching the mouse (and opening the menu from the page below) */
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > .study-nav__sub-nav.popoutContainer * { visibility: inherit !important; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > .study-nav__sub-nav.popoutContainer::before {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 14px;
+  }
+}
+/* fewer animations for readers who ask, but the grace period is timing, not motion: keep it */
+@media (min-width: 992px) and (prefers-reduced-motion: reduce) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > .study-nav__sub-nav.popoutContainer { translate: none; transition: visibility 0s linear .25s !important; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li:is(:hover, :focus-within) > .study-nav__sub-nav.popoutContainer { transition-delay: 0s !important; }
+}
+
+/* the right-hand group: search, Display, Log In, Sign Up */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions {
+  float: none; order: 2; margin-left: auto; display: flex; align-items: center; gap: 8px; height: 76px; padding: 0; background: transparent;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > * { float: none; margin: 0; padding: 0; border: 0; background: transparent; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > :is(#searchBarDesktop, .search-form) { order: 1; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .nu-slot { order: 2; margin: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .login-container { order: 3; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .sign-up-container { order: 4; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .searchTrigger { order: 1; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .mobile-menu-container { order: 5; }
+
+/* search: a rounded field */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop { width: 260px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop .input-group {
+  display: flex; align-items: center; width: 100%; height: 40px; padding: 0; border: 1px solid var(--field-line); border-radius: 8px; background: var(--field); overflow: hidden;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop .input-group:focus-within { border-color: var(--data); box-shadow: 0 0 0 3px color-mix(in srgb, var(--data) 22%, transparent); }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop .form-control {
+  float: none; flex: 1; width: auto; height: 38px; padding: 0 4px 0 14px; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  font: 400 14px/38px var(--f-display); color: var(--ink);
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop .form-control::placeholder { color: var(--ink-3); opacity: 1; font-style: normal; }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop :is(.input-group-addon, button) {
+  flex: none; display: grid; place-items: center; width: 40px; height: 38px; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--ink-2);
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop :is(.input-group-addon, button):hover { color: var(--data); }
+
+/* Log In and Sign Up */
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .login-link {
+  display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border: 1px solid var(--data); border-radius: 8px;
+  font: 600 14px/1 var(--f-display); color: var(--data); text-decoration: none; background: transparent;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .login-link:hover { background: var(--data-soft); color: var(--data); }
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .sign-up-container .reg-cta {
+  display: inline-flex; align-items: center; height: 40px; padding: 0 18px; margin: 0; border: 0; border-radius: 8px;
+  font: 700 14px/1 var(--f-display); letter-spacing: 0; text-transform: none; color: #072435; background: #ffc340; box-shadow: none;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .sign-up-container .reg-cta:hover { background: #ffb21f; color: #072435; }
+
+/* narrower desktops: tighten so everything stays on one row */
+@media (min-width: 992px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .mobile-menu-container { display: none; }   /* empty on desktop, but it took a gap */
+}
+@media (max-width: 1359px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop { width: 196px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > a { padding: 9px 8px; }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main > .container-fluid { padding: 0 16px; column-gap: 4px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav img.breakthrough-logo { max-height: 30px !important; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav { gap: 0; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav ul.study-nav__site-nav > li > a { padding: 8px 7px; font-size: 13.5px; gap: 3px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions { gap: 6px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .login-link { padding: 0 6px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .sign-up-container .reg-cta { padding: 0 14px; }
+}
+/* the search icon the site shows below 1200px: a rounded square */
+@media (max-width: 1199px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .searchTrigger {
+    display: flex !important; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--field-line); border-radius: 8px; background: var(--field); color: var(--ink); cursor: pointer;
+  }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .searchTrigger .icon-search {
+    position: static; display: block; inset: auto; transform: none; width: auto; height: auto; margin: 0; padding: 0;
+    font-size: 17px; line-height: 1; color: currentColor;
+  }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .searchTrigger .icon-search::before { display: block; margin: 0; }
+  /* the icon font draws the glyph 1px left of and below its box's centre */
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .searchTrigger .icon-search { translate: 1px -1px; }
+}
+
+/* tablets and phones: logo, Log In, search, Display, Menu */
+@media (max-width: 991px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main > .container-fluid { padding: 0 14px; min-height: 60px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__logo { height: 60px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav img.breakthrough-logo { max-height: 30px !important; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions { height: 60px; gap: 6px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .login-container { order: 1; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .searchTrigger { order: 1; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .nu-slot { order: 3; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .study-nav__main-actions > .mobile-menu-container { order: 4; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .searchTrigger { width: 38px; height: 38px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .mobile-menu-container > button {
+    height: 38px; padding: 0 14px; margin: 0; border: 0; border-radius: 8px;
+    font: 600 14px/1 var(--f-display); color: var(--on-inverse); background: var(--inverse);   /* 15:1, fixes the site's 3.4:1 teal button */
+  }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .login-link { padding: 0 10px; height: 38px; }
+  /* the opened menu drops below the bar, full width */
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #navsContainer { order: 3; flex-basis: 100%; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #navsContainer.in,
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #navsContainer.collapsing { padding: 6px 0 14px; border-top: 1px solid var(--rule); }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #navsContainer ul.study-nav__site-nav { flex-direction: column; align-items: stretch; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #navsContainer ul.study-nav__site-nav > li { height: auto; display: block; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #navsContainer ul.study-nav__site-nav > li > a { display: flex; padding: 13px 12px; font-size: 15.5px; }
+  /* the search box that drops down under the bar */
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .collapseSearch .input-group { display: flex; border: 1px solid var(--field-line); border-radius: 12px; background: var(--field); overflow: hidden; margin: 8px 0; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .collapseSearch .form-control { border: 0; background: transparent; color: var(--ink); box-shadow: none; height: 42px; font: 400 15px/42px var(--f-display); }
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .collapseSearch :is(.input-group-addon, button) { border: 0; background: transparent; color: var(--ink-2); }
+}
+@media (max-width: 360px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .login-container { display: none; }   /* Log In is also in the menu */
+}
+
+/* -------------------------------------------------------------------------
+   The Eureka 2 nav (.cx-navigation), shown to signed-in readers and drawn by
+   script. It is already in the rebrand's style, so light mode leaves it alone;
+   dark mode recolors it with the same tokens. The Display button sits before
+   the StudyAI button (newui settings).
+   ------------------------------------------------------------------------- */
+body:is(#promoArticleMain, #cxPromoArticleMain) .cx-navigation__right > .nu-slot { margin: 0; }
+@media screen {
+  html[data-theme="dark"] body:is(#promoArticleMain, #cxPromoArticleMain) .cx-navigation { background: #0a2029; border-bottom-color: var(--rule); }
+  html[data-theme="dark"] body:is(#promoArticleMain, #cxPromoArticleMain) .cx-navigation :is(a, button):not(.eureka-2-assistant-launcher) { color: var(--ink); }
+  html[data-theme="dark"] body:is(#promoArticleMain, #cxPromoArticleMain) .cx-navigation .e2-input__wrapper { background: var(--surface); border-color: var(--track); }
+  html[data-theme="dark"] body:is(#promoArticleMain, #cxPromoArticleMain) .cx-navigation .e2-input__input { background: transparent; color: var(--ink); }
+  html[data-theme="dark"] body:is(#promoArticleMain, #cxPromoArticleMain) .cx-navigation :is(.cx-navigation__mobile-menu, .cx-navigation__dropdown, [class*="menu"]) { background-color: var(--surface); color: var(--ink); border-color: var(--rule); }
+}
+
+/* =========================================================================
+   FOOTER
+   ========================================================================= */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer {
+  background: var(--chrome); color: var(--ft-mut); border: 0; padding: 56px 0 28px; margin: 0;
+  font: 400 14px/1.5 var(--f-display);
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid { width: auto; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid::before,
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid::after,
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .clearfix { display: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid:not(.copyright) {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.5fr); gap: 36px 32px; align-items: start;
+}
+/* flatten the Bootstrap columns so every link group is a grid cell */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid:not(.copyright) :is(.col-sm-4, .col-sm-2, .col50, .col-sm-6, [class*="col-"]) {
+  float: none; width: auto; min-height: 0; padding: 0; margin: 0;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid:not(.copyright) > .col-sm-4:not(.footer__connect__container) { display: contents; }
+/* phones: Bootstrap's .visible-xs forces display: block !important */
+@media (max-width: 767px) { body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid:not(.copyright) > .visible-xs { display: contents !important; } }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__social > [class*="col-"] { display: contents; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__container { grid-column: -2 / -1; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer h4 {
+  margin: 0 0 12px; padding: 0; font: 700 12px/1.3 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ft-mut);
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer h4 a { color: inherit; text-decoration: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer li { margin: 0; padding: 0; height: auto; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer a { color: var(--ft-ink); }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer ul a {
+  display: inline-block; padding: 5px 0; font: 500 14.5px/1.4 var(--f-display); text-decoration: none; transition: color .15s;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer a:hover { color: var(--signal); text-decoration: underline; text-underline-offset: 3px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 3px; }
+
+/* app badges stack neatly */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .appDownloads { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .appDownloads h4 { margin-bottom: 2px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .appDownloadButton { display: block; position: static; margin: 0; padding: 0; line-height: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .appDownloadButton img { position: static; height: 40px; width: auto; margin: 0; }
+
+/* social icons become rounded squares */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__social { display: flex; gap: 10px; float: none; margin: 0; padding: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__social__icon {
+  display: grid; place-items: center; width: 42px; height: 42px; padding: 0; margin: 0; border: 1px solid var(--ft-line); border-radius: 12px;
+  color: var(--ft-ink); text-decoration: none; transition: background-color .15s, border-color .15s;
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__social__icon:hover { background: rgb(255 255 255 / .08); border-color: rgb(255 255 255 / .3); text-decoration: none; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__social__icon .icon { position: static; width: auto; height: auto; margin: 0; padding: 0; font-size: 20px; line-height: 1; color: currentColor; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .workingScholars { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; float: none; margin: 0; padding: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .workingScholars img { height: 30px; width: auto; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .workingScholarsText { float: none; width: auto; padding: 0; font: 400 13px/1.45 var(--f-display); color: var(--ft-mut); text-align: left; }
+
+/* bottom bar */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid.copyright {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--ft-line);
+}
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .copyright p { order: 3; flex-basis: 100%; margin: 0; font: 400 12.5px/1.5 var(--f-display); color: var(--ft-mut); }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .copyright > div:not(.bbbLogo) { order: 1; margin-right: auto !important; display: flex; flex-wrap: wrap; gap: 6px 20px; float: none; margin: 0; padding: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .copyright > div:not(.bbbLogo) a { font: 500 13px/1.4 var(--f-display); color: var(--ft-ink); text-decoration: none; padding: 0; margin: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .bbbLogo { order: 2; float: none; margin: 0; padding: 0; }
+
+/* tablets: three columns; phones: two */
+@media (max-width: 991px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid:not(.copyright) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__container { grid-column: 1 / -1; }
+}
+@media (max-width: 767.9px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer { padding: 40px 0 24px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid { padding: 0 20px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid:not(.copyright) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 20px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .container-fluid:not(.copyright) > :is(.col50, .col-sm-4, .col-sm-6) { min-width: 0; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .bbbLogo { margin: 0; }
+  /* phones get their own markup: app badges and social icons come last */
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .appDownloads { order: 5; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .container-fluid:not(.copyright) .col50:has(> .footer__connect__social) { order: 6; align-self: end; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__social { flex-wrap: wrap; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer > .bbbLogo { display: block; margin: 32px 20px 0; padding: 0; }
+}
+
+/* -------------------------------------------------------------------------
+   Compact footer (C+), once the footer-links component has run (footer.ftl).
+   Line 1: logo, popular links, "All links", social. Line 2: legal links,
+   copyright, app badges, BBB. "All links" shows the full list in place.
+   ------------------------------------------------------------------------- */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl { padding: 26px 0 18px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl > .ftl-top { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-link { color: var(--ft-ink); }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-link:hover { color: var(--signal); }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-more { color: var(--ft-ink); border-color: var(--ft-line); }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-top .footer__connect__social { margin-left: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-top .footer__connect__social__icon { width: 36px; height: 36px; border-radius: 10px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-top .footer__connect__social__icon .icon { font-size: 17px; }
+/* the full list, when open: a soft panel under line 1 */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl > .container-fluid:not(.copyright) {
+  margin-top: 16px; padding: 20px 22px; border-radius: 14px; background: rgb(255 255 255 / .05);
+  max-width: calc(1200px - 48px); gap: 24px 28px;
+}
+@media (min-width: 992px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl > .container-fluid:not(.copyright) { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.2fr); }
+}
+/* phone copies of the social icons and app badges: the moved ones show at every width */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .visible-xs :is(.footer__connect__social, .appDownloads),
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .visible-xs .col50:has(> .footer__connect__social) { display: none !important; }
+/* line 2 */
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl > .container-fluid.copyright { margin-top: 16px; padding-top: 14px; gap: 10px 18px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright > div:not(.bbbLogo):not(.appDownloads) { order: 1; margin-right: auto !important; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright p { order: 4; flex-basis: 100%; font-size: 12px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright .appDownloads { order: 2; margin-right: 0 !important; display: flex !important; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 8px; float: none; width: auto; min-height: 0; padding: 0; margin: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright .appDownloads h4 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: 0; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright .appDownloadButton img { height: 32px; }
+body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright .bbbLogo { order: 3; zoom: .62; }   /* the badge is a fixed-size image link: scale it as a whole */
+@media (max-width: 767.9px) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl { padding: 22px 0 16px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl > .ftl-top { padding: 0 20px; gap: 14px 18px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-logo { flex-basis: 100%; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .ftl-nav { flex-basis: 100%; gap: 4px 16px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl > .container-fluid:not(.copyright) { margin: 14px 20px 0; padding: 18px; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright > div:not(.bbbLogo):not(.appDownloads) { flex-basis: 100%; }
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer.ftl .copyright p { flex-basis: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) :is(nav.study-nav, footer#footer) * { transition: none !important; }
+}
+@media (forced-colors: active) {
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav #searchBarDesktop .input-group,
+  body:is(#promoArticleMain, #cxPromoArticleMain) nav.study-nav .sign-up-container .reg-cta,
+  body:is(#promoArticleMain, #cxPromoArticleMain) footer#footer .footer__connect__social__icon { border: 1px solid CanvasText; }
+}

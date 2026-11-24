@@ -1,0 +1,13 @@
+/* Styles for the stat-bars component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body .enh-bar { display: block; height: 8px; margin-top: 8px; background: color-mix(in srgb, var(--track) 55%, transparent); border-radius: 2px; overflow: hidden; }
+html.enh:not(#enh) body .enh-bar__fill { display: block; height: 100%; width: calc(var(--v) * 100%); background: var(--data); border-radius: 2px; transform-origin: 0 50%; transform: scaleX(0); transition: transform .9s cubic-bezier(.2, .7, .2, 1); }
+html.enh:not(#enh) body .enh-bar.is-max .enh-bar__fill { background: var(--ink); }
+html.enh:not(#enh) body ul.enh-bars.is-in .enh-bar__fill { transform: scaleX(1); }
+html.enh:not(#enh) body ul.enh-bars > li:nth-child(2) .enh-bar__fill { transition-delay: .08s; }
+html.enh:not(#enh) body ul.enh-bars > li:nth-child(3) .enh-bar__fill { transition-delay: .16s; }
+html.enh:not(#enh) body ul.enh-bars > li:nth-child(4) .enh-bar__fill { transition-delay: .24s; }
+html.enh:not(#enh) body ul.enh-bars > li:nth-child(5) .enh-bar__fill { transition-delay: .32s; }
+@media (prefers-reduced-motion: reduce) {
+  html.enh:not(#enh) body .enh-bar__fill { transition: none; }
+}

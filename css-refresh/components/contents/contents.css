@@ -1,0 +1,57 @@
+/* Styles for the contents component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body .enh-toc { display: none; }
+html.enh.enh-rail:not(#enh) body .enh-toc { display: block; position: fixed; top: 96px; z-index: 900; left: var(--rail-l, 16px); width: var(--rail-w, 212px); max-height: calc(100vh - 140px); overflow: auto; opacity: 0; visibility: hidden; translate: -8px 0; transition: opacity .25s, translate .25s, visibility 0s .25s; }
+html.enh.enh-rail:not(#enh) body .enh-toc.is-visible { opacity: 1; visibility: visible; translate: 0 0; transition: opacity .25s, translate .25s; }
+html.enh.enh-rail:not(#enh) body .enh-fab { display: none !important; }
+/* no scrollbar on the rail: it fits where it can, and when it can't, faded edges show there's more */
+html.enh.enh-rail:not(#enh) body .enh-toc { scrollbar-width: none; overscroll-behavior: contain; }
+html.enh.enh-rail:not(#enh) body .enh-toc::-webkit-scrollbar { display: none; }
+html.enh.enh-rail:not(#enh) body .enh-toc.has-more-below { -webkit-mask-image: linear-gradient(#000 calc(100% - 40px), transparent); mask-image: linear-gradient(#000 calc(100% - 40px), transparent); }
+html.enh.enh-rail:not(#enh) body .enh-toc.has-more-above { -webkit-mask-image: linear-gradient(transparent, #000 40px); mask-image: linear-gradient(transparent, #000 40px); }
+html.enh.enh-rail:not(#enh) body .enh-toc.has-more-above.has-more-below { -webkit-mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent); }
+@media (max-height: 860px) {
+  html.enh.enh-rail:not(#enh) body .enh-toc .enh-toc__list a { padding-block: 5px; }
+  html.enh.enh-rail:not(#enh) body .enh-toc .enh-toc__cta { padding-top: 12px; margin-bottom: 12px; }
+  html.enh.enh-rail:not(#enh) body .enh-toc .enh-toc__cta p { display: none; }
+}
+html.enh:not(#enh) body .enh-toc__label { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin: 0 0 12px; font: 500 11.5px/1.2 var(--f-data); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+html.enh:not(#enh) body .enh-toc__time { letter-spacing: .02em; text-transform: none; white-space: nowrap; }
+html.enh:not(#enh) body .enh-toc__label > span:first-child { white-space: nowrap; }
+/* the list: a marker per entry, no track line beside it (progress lives under the current entry) */
+html.enh:not(#enh) body .enh-toc__count { letter-spacing: .07em; }
+html.enh:not(#enh) body .enh-toc__list { list-style: none; margin: 0 0 16px; padding: 0; }
+html.enh:not(#enh) body .enh-toc__list a { display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 10px; align-items: start; padding: 7px 0; font: 500 14px/1.35 var(--f-display); color: var(--ink-3); text-decoration: none; }
+html.enh:not(#enh) body .enh-toc__list a:hover { color: var(--ink); }
+html.enh:not(#enh) body .enh-toc__list a:focus-visible { outline: 2px solid var(--data); outline-offset: 2px; border-radius: 4px; }
+html.enh:not(#enh) body .enh-toc__t { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+html.enh:not(#enh) body .enh-toc__n { justify-self: stretch; margin-top: 1px; border-radius: 4px; text-align: center; font: 500 12px/1.6 var(--f-data); color: var(--ink-3); }
+/* current: the marker in a yellow chip, and a bar that fills as you read the section */
+html.enh:not(#enh) body .enh-toc__list a[aria-current="true"] { color: var(--ink); font-weight: 600; }
+html.enh:not(#enh) body .enh-toc__list a[aria-current="true"] .enh-toc__n { background: var(--signal); color: #072435; font-weight: 600; }
+html.enh:not(#enh) body .enh-toc__bar { display: none; grid-column: 2; height: 3px; margin-top: 8px; border-radius: 2px; background: linear-gradient(90deg, var(--signal) calc(var(--p, 0) * 100%), var(--track) 0); }
+html.enh:not(#enh) body .enh-toc__list a[aria-current="true"] .enh-toc__bar { display: block; }
+/* finished: a check instead of the marker */
+html.enh:not(#enh) body .enh-toc__list a.is-done { color: var(--ink-2); }
+html.enh:not(#enh) body .enh-toc__list a.is-done .enh-toc__n { position: relative; color: transparent; }
+html.enh:not(#enh) body .enh-toc__list a.is-done .enh-toc__n::before { content: "\2713" / ""; position: absolute; inset: 0; color: var(--data); font-weight: 700; }
+/* an optional link under the list (setting: cta) */
+html.enh:not(#enh) body .enh-toc__cta { margin: 0 0 18px; padding-top: 16px; border-top: 1px solid var(--rule); font: 400 13.5px/1.5 var(--f-body); color: var(--ink-2); }
+html.enh:not(#enh) body .enh-toc__cta p { margin: 0 0 10px; }
+html.enh:not(#enh) body .enh-toc__cta a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border: 1px solid var(--data); border-radius: 8px; color: var(--data); font: 600 13px/1.2 var(--f-display); text-decoration: none; }
+html.enh:not(#enh) body .enh-toc__cta a:hover { background: var(--data-soft); }
+html.enh:not(#enh) body .enh-fab { position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 950; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px 10px 14px; font: 600 14px/1 var(--f-display); color: var(--on-inverse); background: var(--inverse); border: 0; border-radius: 999px; cursor: pointer; box-shadow: 0 10px 28px -10px rgb(7 36 48 / .6); opacity: 0; visibility: hidden; translate: 0 8px; transition: opacity .2s, translate .2s, visibility 0s .2s; }
+html.enh:not(#enh) body .enh-fab.is-visible { opacity: 1; visibility: visible; translate: 0 0; transition: opacity .2s, translate .2s; }
+html.enh:not(#enh) body .enh-fab .enh-ico { font-size: 18px; }
+html.enh:not(#enh) body .enh-fab__n:not(:empty) { font: 500 12px/1 var(--f-data); color: color-mix(in srgb, var(--on-inverse) 72%, transparent); padding-left: 8px; border-left: 1px solid color-mix(in srgb, var(--on-inverse) 28%, transparent); }
+html.enh:not(#enh) body dialog.enh-sheet { position: fixed; inset: auto 0 0 0; margin: 0; width: 100%; max-width: none; max-height: min(78vh, 640px); padding: 16px 20px calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--paper); color: var(--ink); border: 0; border-radius: 18px 18px 0 0; box-shadow: 0 -12px 40px -12px rgb(7 36 48 / .35); overflow: auto; }
+html.enh:not(#enh) body dialog.enh-sheet::backdrop { background: rgb(7 36 48 / .38); }
+html.enh:not(#enh) body .enh-sheet__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+html.enh:not(#enh) body .enh-sheet__head .enh-toc__label { margin: 0; flex: 1; padding-right: 12px; }
+html.enh:not(#enh) body .enh-sheet .enh-iconbtn { color: var(--ink); background: var(--surface); border-color: var(--rule); }
+html.enh:not(#enh) body .enh-sheet .enh-toc__list { margin-top: 10px; }
+html.enh:not(#enh) body .enh-sheet .enh-toc__list a { padding-block: 10px; font-size: 15px; }
+html.enh:not(#enh) body .enh-sheet .enh-toc__cta { margin-top: 4px; }
+@media (min-width: 768px) {
+  html.enh:not(#enh) body dialog.enh-sheet { inset: auto auto 76px 16px; width: 380px; border-radius: 16px; border: 1px solid var(--rule); }
+}

@@ -1,0 +1,50 @@
+# Publishes dist/site to your own server whenever main changes.
+# Turn on: repository Settings → Secrets and variables → Actions →
+#   Variables: DEPLOY_TARGET = server, DEPLOY_METHOD = ssh or ftp
+#   Secrets:   DEPLOY_HOST, DEPLOY_USER, DEPLOY_PATH (the folder the domain serves, e.g. /home/me/public_html/study-enhance)
+#              and DEPLOY_SSH_KEY (for ssh) or DEPLOY_PASSWORD (for ftp)
+name: deploy (own server)
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: server-deploy
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: vars.DEPLOY_TARGET == 'server'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Checks (a failing check stops the publish; the live site stays as it was)
+        run: python page-layers/tools/cli.py check
+      - run: python build.py
+      - name: Upload over SSH (rsync)
+        if: vars.DEPLOY_METHOD != 'ftp'
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          DEST: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          install -m 600 /dev/null ~/key && printf '%s\n' "$KEY" > ~/key
+          # pl.js last, so readers never get a lookup that points at files not uploaded yet
+          rsync -rz --exclude pl.js -e "ssh -i ~/key -o StrictHostKeyChecking=accept-new" dist/site/ "$USER@$HOST:$DEST/"
+          rsync -z -e "ssh -i ~/key -o StrictHostKeyChecking=accept-new" dist/site/pl.js "$USER@$HOST:$DEST/pl.js"
+      - name: Upload over FTP (lftp)
+        if: vars.DEPLOY_METHOD == 'ftp'
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PASS: ${{ secrets.DEPLOY_PASSWORD }}
+          DEST: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          sudo apt-get install -y lftp >/dev/null
+          lftp -u "$USER,$PASS" "$HOST" -e "set ftp:ssl-allow yes; mirror -R --exclude-glob pl.js dist/site $DEST; put -O $DEST dist/site/pl.js; quit"

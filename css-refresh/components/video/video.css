@@ -1,0 +1,13 @@
+/* Styles for the video component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body .enh-video { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; border-radius: 12px; overflow: hidden; cursor: pointer; background: #111; }
+html.enh:not(#enh) body .enh-video__poster { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease, filter .4s ease; }
+html.enh:not(#enh) body .enh-video:hover .enh-video__poster { transform: scale(1.02); filter: brightness(.92); }
+html.enh:not(#enh) body .enh-video__play { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; background: var(--signal); color: var(--ink); font-size: 34px; box-shadow: 0 10px 30px -8px rgb(0 0 0 / .6); transition: transform .2s ease; }
+html.enh:not(#enh) body .enh-video__play .enh-ico { margin-left: 4px; }
+html.enh:not(#enh) body .enh-video:hover .enh-video__play { transform: scale(1.06); }
+html.enh:not(#enh) body .enh-video__label { position: absolute; left: 14px; bottom: 14px; padding: 6px 10px; border-radius: 999px; background: rgb(7 36 48 / .85); color: #fff; font: 600 12.5px/1 var(--f-display); }
+@media (prefers-reduced-motion: reduce) {
+  html.enh:not(#enh) body .enh-video__poster,
+html.enh:not(#enh) body .enh-video__play { transition: none; }
+}

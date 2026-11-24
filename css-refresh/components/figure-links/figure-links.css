@@ -1,0 +1,3 @@
+/* Styles for the figure-links component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body .enh-figref { color: var(--data); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; white-space: nowrap; }

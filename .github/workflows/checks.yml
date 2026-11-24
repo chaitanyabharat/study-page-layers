@@ -1,0 +1,37 @@
+# Runs on every draft (pull request). The dashboard's Publish button stays off until this passes.
+name: checks
+on:
+  pull_request:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Page checks (scoped CSS, size budgets, reviewed components, risk tier)
+        run: python page-layers/tools/cli.py check
+      - name: Build
+        run: python build.py
+      - name: Scan every component
+        run: |
+          python - <<'EOF'
+          import json, subprocess, sys
+          reg = json.load(open("page-layers/components/registry.json"))
+          bad = 0
+          for name in [k for k in reg if not k.startswith("_")]:
+              r = subprocess.run([sys.executable, "page-layers/tools/cli.py", "scan", name], capture_output=True, text=True)
+              print(r.stdout.strip())
+              bad |= r.returncode
+          sys.exit(bad)
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist/
+          retention-days: 7

@@ -1,0 +1,47 @@
+/* Where enhancement components sit on the research-hub article template.
+   Page CSS: it names this template's elements (#hub, .hub-content-container,
+   the key-findings cards, one wide chart), so it ships with the page, not the components. */
+html.enh body#promoArticleMain #hub .hub-content-container:has(.enh-waffle)::before,
+html.enh body#promoArticleMain #hub .hub-content-container:has(.enh-waffle)::after { display: none; content: none; }
+html.enh body#promoArticleMain #hub .hub-content-container > .enh-waffle { grid-column: hero; grid-row: 4; justify-self: start; align-self: start; width: min(100%, 520px); margin: 36px 0 0; padding: 18px 20px 20px; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; }
+@media (min-width: 1280px) {
+  html.enh body#promoArticleMain #hub .hub-content-container > .enh-waffle { grid-column: art-start / hero-end; grid-row: 1 / 6; width: auto; max-width: none; margin-top: 60px; }
+  /* the title, crumb and dek keep their own column beside the cover chart */
+  html.enh body#promoArticleMain #hub .hub-content-container:has(.enh-waffle) > :is(.pageNavigation, h1, p.description) { grid-column: hero-start / text-end; }
+}
+@media (max-width: 767.9px) {
+  html.enh body#promoArticleMain #hub .hub-content-container > .enh-waffle { width: 100%; padding: 16px; }
+}
+@media (min-width: 768px) and (max-width: 1279.9px) {
+  html.enh body#promoArticleMain #hub .hub-content-container > .enh-waffle { justify-self: stretch; width: auto; max-width: none; display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); grid-template-rows: auto auto 1fr; grid-template-areas: "head head" "grid chips" "grid note"; column-gap: 36px; margin-top: 40px; padding: 22px 26px 24px; }
+}
+@media (min-width: 1280px) {
+  html.enh body#promoArticleMain #hub .hub-content-container:has(.enh-waffle) { grid-template-columns: [full-start] minmax(var(--gutter), 1fr) [hero-start] minmax(0, calc(var(--xwide) - 348px)) [text-end] 40px [art-start] 308px [hero-end] minmax(var(--gutter), 1fr) [full-end]; }
+}
+html.enh body#promoArticleMain #hub #hub-content > ul.enh-bars { margin-top: 14px; border-top: 1px solid var(--rule); }
+html.enh body#promoArticleMain #hub #hub-content > ul.enh-bars > li { padding: 10px 0 12px; margin: 0; border-bottom: 1px solid var(--rule); }
+html.enh body#promoArticleMain #hub #hub-content > ul.enh-bars > li::before { display: none; }
+html.enh body#promoArticleMain #hub #hub-content > h3.enh-finding { position: relative; }
+html.enh body#promoArticleMain #hub #hub-content > h3.enh-finding > .enh-copy { position: absolute; top: 34px; right: 0; }
+@media (min-width: 1280px) {
+  html.enh body#promoArticleMain #hub #hub-content > h3.enh-finding > .enh-copy { right: 28px; }
+}
+@media (min-width: 1280px) {
+  html.enh body#promoArticleMain #hub #hub-content > #section---KeyFindings + h3 + ul + h3 + ul + h3 > .enh-copy { right: 28px; }
+}
+@media (hover: hover) {
+  html.enh body#promoArticleMain #hub #hub-content > h3.enh-finding > .enh-copy { opacity: 0; transition: opacity .15s; }
+}
+@media (hover: hover) {
+  html.enh body#promoArticleMain #hub #hub-content > h3.enh-finding:is(:hover, :focus-within) > .enh-copy,
+html.enh body#promoArticleMain #hub #hub-content > h3.enh-finding:has(+ ul:hover) > .enh-copy { opacity: 1; }
+}
+@media (max-width: 767.9px) {
+  html.enh body#promoArticleMain #hub #hub-content > table.enh-chart:has(img[src*="fig13-"])::after { display: none; }
+}
+@media (max-width: 767.9px) {
+  html.enh body#promoArticleMain #hub #hub-content > table.enh-chart:has(img[src*="fig13-"]) td { overflow: hidden; }
+}
+@media (max-width: 767.9px) {
+  html.enh body#promoArticleMain #hub #hub-content > table.enh-chart img[src*="fig13-"] { width: calc(1400 / 1272 * 100%); margin: 0 0 calc(-92 / 1272 * 100%) calc(-64 / 1272 * 100%); }
+}

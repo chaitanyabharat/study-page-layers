@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Page Layers dashboard</title>
+<style>
+:root{--ink:#072435;--ink2:#374f5c;--muted:#5d717b;--rule:#d6e3ea;--bg:#f4f8fa;--surface:#fff;--blue:#007bba;--blue-soft:#e3f3ff;--sun:#ffc340;--good:#1f7a3f;--risk:#a35400;--bad:#b3261e;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--ink:#eaf2f4;--ink2:#bccad0;--muted:#8fa4ac;--rule:#1f3c48;--bg:#051820;--surface:#0b2530;--blue:#5cb8ec;--blue-soft:#0f3646;--good:#6fd197;--risk:#f2a65a;--bad:#ff8a80;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink2);font:15px/1.5 Inter,"Segoe UI",Arial,sans-serif}
+h1,h2,h3{color:var(--ink);margin:0}
+h1{font:700 18px/1 Poppins,"Segoe UI",Arial,sans-serif}
+h2{font:700 20px/1.2 Poppins,"Segoe UI",Arial,sans-serif}
+h3{font:600 15px/1.3 Inter,"Segoe UI",Arial,sans-serif;margin-bottom:8px}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 12px;font-weight:600}
+button:hover:not(:disabled){border-color:var(--blue)}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+button.danger{border-color:var(--bad);color:var(--bad)}
+input[type=text],input[type=password],textarea,select{width:100%;border:1px solid var(--rule);border-radius:8px;padding:8px 10px;background:var(--surface)}
+textarea{font:13px/1.45 "IBM Plex Mono",Consolas,monospace;min-height:160px;resize:vertical}
+code{font:13px "IBM Plex Mono",Consolas,monospace;background:var(--blue-soft);padding:1px 5px;border-radius:4px}
+a{color:var(--blue)}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:5}
+header .sp{flex:1}
+.chip{display:inline-block;padding:2px 9px;border-radius:999px;font:600 12px/1.6 Inter,Arial,sans-serif;background:var(--blue-soft);color:var(--ink)}
+.chip.good{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.chip.warn{background:color-mix(in srgb,var(--sun) 40%,transparent);color:var(--ink)}
+.chip.bad{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+main{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px;padding:20px;max-width:1400px;margin:0 auto}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px}
+.stack{display:grid;gap:14px;align-content:start}
+.pages button{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;margin-bottom:6px;font-weight:500}
+.pages button[aria-current=true]{border-color:var(--ink);border-width:2px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.grid2{grid-template-columns:1fr}}
+label.f{display:grid;gap:4px;font-weight:600;color:var(--ink);font-size:14px}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+.comps{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.comp{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;padding:10px;border:1px solid var(--rule);border-radius:10px;align-items:start}
+.comp input{margin-top:4px}
+.comp b{color:var(--ink)}
+.comp p{grid-column:2;margin:0;font-size:13px;color:var(--muted)}
+.comp.auto{opacity:.75}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.msg{padding:10px 12px;border-radius:8px;background:var(--blue-soft);color:var(--ink);font-size:14px}
+.msg.bad{background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.msg.good{background:color-mix(in srgb,var(--good) 14%,transparent)}
+.drafts li{margin-bottom:8px}
+ol.steps{margin:0;padding-left:20px}
+.kill{border-color:color-mix(in srgb,var(--bad) 45%,var(--rule))}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>Page Layers</h1>
+  <span id="where" class="chip">not connected</span>
+  <span id="switchChip" class="chip">switch: ?</span>
+  <span class="sp"></span>
+  <button id="signOut" hidden>Sign out</button>
+</header>
+
+<section id="signin" class="card" style="max-width:640px;margin:40px auto" hidden>
+  <h2>Sign in with a GitHub access token</h2>
+  <p>The dashboard saves changes to the GitHub repository <code id="repoName"></code>. Each person uses their own token, so every change shows who made it.</p>
+  <ol class="steps">
+    <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Settings → Fine-grained tokens → Generate new token</a>.</li>
+    <li>Repository access: <b>Only select repositories</b> → this repository.</li>
+    <li>Permissions: <b>Contents</b>: Read and write, <b>Pull requests</b>: Read and write, <b>Commit statuses</b> and <b>Checks</b>: Read (if listed).</li>
+    <li>Generate, copy, and paste it here. It's kept only in this browser and sent only to api.github.com.</li>
+  </ol>
+  <div class="row" style="margin-top:12px"><input id="token" type="password" placeholder="github_pat_…" autocomplete="off" style="flex:1"><button class="primary" id="signInBtn">Sign in</button></div>
+  <p id="signinMsg" class="hint"></p>
+</section>
+
+<main id="app" hidden>
+  <aside class="stack">
+    <div class="card pages">
+      <h3>Pages</h3>
+      <div id="pageList"></div>
+      <button id="newPage" style="width:100%">+ New page</button>
+    </div>
+    <div class="card">
+      <h3>Drafts waiting to publish</h3>
+      <ul class="drafts" id="drafts" style="padding-left:18px;margin:0"></ul>
+      <button id="refreshDrafts" style="margin-top:8px">Refresh</button>
+    </div>
+    <div class="card kill">
+      <h3>Kill switch</h3>
+      <p class="hint" id="killText">Turns the new look off on every page within about 5 minutes of publishing.</p>
+      <button class="danger" id="killBtn">Turn everything off</button>
+    </div>
+  </aside>
+
+  <section class="stack" id="editor">
+    <div class="card" id="empty"><h2>Pick a page</h2><p>Choose a page on the left to see and change its new look.</p></div>
+
+    <div class="card stack" id="pageCard" hidden>
+      <div class="row"><h2 id="pTitle"></h2><span class="sp"></span><span id="pStatus" class="chip"></span></div>
+      <div class="grid2">
+        <label class="f">Title <input type="text" id="fTitle"></label>
+        <label class="f">Status
+          <select id="fStatus"><option value="live">Live: new look is on</option><option value="off">Off: page stays as it is</option></select>
+        </label>
+      </div>
+      <label class="f">Page addresses <span class="hint">One per line, the part after the domain, e.g. /resources/state-of-ai-jobs-and-skills.html</span>
+        <textarea id="fPaths" style="min-height:60px"></textarea></label>
+      <label class="row" style="font-weight:600;color:var(--ink)"><input type="checkbox" id="fSwitch"> Show the Display button (lets readers switch back to the classic look and pick a theme)</label>
+    </div>
+
+    <div class="card" id="compCard" hidden>
+      <h3>Components</h3>
+      <p class="hint">Tick what this page should use. Anything a component needs is added automatically (shown faded). Only reviewed components can be published.</p>
+      <div class="comps" id="comps"></div>
+    </div>
+
+    <div class="card" id="setCard" hidden>
+      <h3>Settings <span class="hint">(JSON: chart titles, where things go, labels)</span></h3>
+      <textarea id="fSettings" spellcheck="false" style="min-height:220px"></textarea>
+      <p class="hint" id="setMsg"></p>
+    </div>
+
+    <div class="card" id="cssCard" hidden>
+      <h3>Styles (CSS)</h3>
+      <p class="hint">Every rule must start with the page's scope, <code id="scopeCode"></code>, so it can't affect other pages.</p>
+      <div class="tabs" id="cssTabs" role="tablist"></div>
+      <p class="hint" id="cssShared"></p>
+      <textarea id="fCss" spellcheck="false" style="min-height:320px"></textarea>
+    </div>
+
+    <div class="card stack" id="actCard" hidden>
+      <div class="row">
+        <button id="previewBtn">Copy preview script</button>
+        <button class="primary" id="saveBtn">Save as draft</button>
+        <span class="hint" id="dirty"></span>
+      </div>
+      <p class="hint">Preview: open the page on stage-study.com or study.com, press F12, open Console, paste, press Enter. Nothing is installed; reloading the page removes it.</p>
+      <div id="actMsg"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+'use strict';
+/* ------------------------------------------------------------------ setup */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).has('local');
+const TOKEN_KEY = 'pl-dashboard-token';
+let SITE = { repo: 'OWNER/study-page-layers', branch: 'main', host: '', sites: [] };
+let REG = {}, PAGES = {}, CUR = null, ORIG = {}, CSS_CACHE = {}, CSS_TAB = null, SWITCH = { off: false };
+
+const utf8ToB64 = (s) => { const b = new TextEncoder().encode(s); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin); };
+const b64ToUtf8 = (s) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g, '')), (c) => c.charCodeAt(0)));
+const json = (o) => JSON.stringify(o, null, 2) + '\n';
+
+/* ------------------------------------------------------------------ storage: GitHub, or local files when testing */
+const gh = {
+  token: () => { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } },
+  async api(path, opts = {}) {
+    const r = await fetch('https://api.github.com' + path, {
+      ...opts,
+      headers: { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + gh.token(), 'X-GitHub-Api-Version': '2022-11-28', ...(opts.body ? { 'Content-Type': 'application/json' } : {}) },
+    });
+    const body = r.status === 204 ? null : await r.json().catch(() => null);
+    if (!r.ok) { const e = new Error((body && body.message) || ('GitHub said ' + r.status)); e.status = r.status; e.body = body; throw e; }
+    return body;
+  },
+  async read(path, ref) { const b = await gh.api(`/repos/${SITE.repo}/contents/${path}?ref=${encodeURIComponent(ref || SITE.branch)}`); return { text: b64ToUtf8(b.content), sha: b.sha }; },
+  async list(path) { const b = await gh.api(`/repos/${SITE.repo}/contents/${path}?ref=${encodeURIComponent(SITE.branch)}`); return b.map((x) => ({ name: x.name, type: x.type })); },
+  async who() { return gh.api('/user'); },
+  /* A draft = a new branch with the changed files, and a pull request. Checks run on it automatically. */
+  async saveDraft(files, title, body) {
+    const base = await gh.api(`/repos/${SITE.repo}/git/ref/heads/${SITE.branch}`);
+    const branch = 'dash/' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) + '-' + Date.now().toString(36);
+    await gh.api(`/repos/${SITE.repo}/git/refs`, { method: 'POST', body: JSON.stringify({ ref: 'refs/heads/' + branch, sha: base.object.sha }) });
+    for (const f of files) {
+      let sha;
+      try { sha = (await gh.api(`/repos/${SITE.repo}/contents/${f.path}?ref=${encodeURIComponent(branch)}`)).sha; } catch (e) { if (e.status !== 404) throw e; }
+      await gh.api(`/repos/${SITE.repo}/contents/${f.path}`, { method: 'PUT', body: JSON.stringify({ message: `${title}: ${f.path}`, content: utf8ToB64(f.content), branch, ...(sha ? { sha } : {}) }) });
+    }
+    const pr = await gh.api(`/repos/${SITE.repo}/pulls`, { method: 'POST', body: JSON.stringify({ title, head: branch, base: SITE.branch, body: body + '\n\nSaved from the Page Layers dashboard.' }) });
+    return { number: pr.number, url: pr.html_url };
+  },
+  async drafts() {
+    const prs = await gh.api(`/repos/${SITE.repo}/pulls?state=open&per_page=30`);
+    const out = [];
+    for (const p of prs.filter((x) => x.head.ref.startsWith('dash/'))) {
+      out.push({ number: p.number, title: p.title, url: p.html_url, by: p.user.login, ...(await gh.checks(p.head.sha)) });
+    }
+    return out;
+  },
+  async checks(sha) {
+    const r = await gh.api(`/repos/${SITE.repo}/commits/${sha}/check-runs?per_page=50`);
+    const runs = r.check_runs || [];
+    if (!runs.length) return { state: 'pending', detail: 'checks starting' };
+    if (runs.some((c) => c.status !== 'completed')) return { state: 'pending', detail: 'checks running' };
+    const bad = runs.filter((c) => !['success', 'neutral', 'skipped'].includes(c.conclusion));
+    return bad.length ? { state: 'failed', detail: bad.map((c) => c.name).join(', ') + ' failed', link: bad[0].html_url } : { state: 'passed', detail: 'checks passed' };
+  },
+  async publish(number) {
+    await gh.api(`/repos/${SITE.repo}/pulls/${number}/merge`, { method: 'PUT', body: JSON.stringify({ merge_method: 'squash' }) });
+    try { const p = await gh.api(`/repos/${SITE.repo}/pulls/${number}`); await gh.api(`/repos/${SITE.repo}/git/refs/heads/${p.head.ref}`, { method: 'DELETE' }); } catch (e) { /* branch already gone */ }
+  },
+  async discard(number) {
+    const p = await gh.api(`/repos/${SITE.repo}/pulls/${number}`, { method: 'PATCH', body: JSON.stringify({ state: 'closed' }) });
+    try { await gh.api(`/repos/${SITE.repo}/git/refs/heads/${p.head.ref}`, { method: 'DELETE' }); } catch (e) { /* ignore */ }
+  },
+};
+/* Local test mode (python tools/dev_server.py, then open /admin/?local): reads and writes the files on disk. */
+const local = {
+  async read(path) { const r = await fetch('/local/read?path=' + encodeURIComponent(path)); if (!r.ok) { const e = new Error('not found: ' + path); e.status = r.status; throw e; } return { text: await r.text() }; },
+  async list(path) { return (await fetch('/local/list?path=' + encodeURIComponent(path))).json(); },
+  async who() { return { login: 'local test' }; },
+  async saveDraft(files, title) { const r = await fetch('/local/save', { method: 'POST', body: JSON.stringify({ files, title }) }); return r.json(); },
+  async drafts() { return (await fetch('/local/drafts')).json(); },
+  async publish(number) { const r = await fetch('/local/publish?n=' + number, { method: 'POST' }); if (!r.ok) throw new Error(await r.text()); },
+  async discard(number) { await fetch('/local/discard?n=' + number, { method: 'POST' }); },
+};
+const store = LOCAL ? local : gh;
+
+/* ------------------------------------------------------------------ helpers */
+function componentList(page) {             // same rule as page-layers/tools/pl.py component_list
+  const want = new Set(), todo = [...(page.components || [])];
+  while (todo.length) { const c = todo.pop(); if (want.has(c) || c === 'newui') continue; want.add(c); todo.push(...((REG[c] || {}).needs || [])); }
+  return Object.keys(REG).filter((c) => want.has(c)).concat([...want].filter((c) => !(c in REG)).sort());
+}
+const repoPath = (ref, pid) => (ref.startsWith('/') ? ref.slice(1) : `page-layers/pages/${pid}/${ref}`);
+/* Line endings are normalised to \n: text boxes do that anyway, so a file with \r\n would always look changed. */
+async function readCss(path) { if (!(path in CSS_CACHE)) { try { CSS_CACHE[path] = (await store.read(path)).text.replace(/\r\n?/g, '\n'); } catch (e) { CSS_CACHE[path] = ''; } } return CSS_CACHE[path]; }
+function msg(el, text, kind) { el.innerHTML = text ? `<div class="msg ${kind || ''}">${text}</div>` : ''; }
+function pagesUsing(path) { return Object.entries(PAGES).filter(([pid, p]) => (p.css || []).some((r) => repoPath(r, pid) === path)).map(([pid]) => pid); }
+
+/* ------------------------------------------------------------------ load */
+async function boot() {
+  try { SITE = { ...SITE, ...(await (await fetch('site.json', { cache: 'no-store' })).json()) }; } catch (e) { /* defaults */ }
+  if (LOCAL) { SITE.repo = 'local files'; }
+  $('repoName').textContent = SITE.repo;
+  if (!LOCAL && !gh.token()) { $('signin').hidden = false; return; }
+  try {
+    const me = await store.who();
+    $('where').textContent = (LOCAL ? 'LOCAL TEST · ' : '') + 'signed in: ' + me.login;
+    $('where').className = 'chip good';
+    $('signOut').hidden = LOCAL;
+  } catch (e) {
+    $('signin').hidden = false; $('signinMsg').textContent = 'Sign-in failed: ' + e.message; return;
+  }
+  $('app').hidden = false;
+  const reg = JSON.parse((await store.read('page-layers/components/registry.json')).text);
+  REG = Object.fromEntries(Object.entries(reg).filter(([k]) => !k.startsWith('_')));
+  try { SWITCH = JSON.parse((await store.read('switch.json')).text); } catch (e) { SWITCH = { off: false }; }
+  showSwitch();
+  const dirs = (await store.list('page-layers/pages')).filter((x) => x.type === 'dir');
+  for (const d of dirs) { try { PAGES[d.name] = JSON.parse((await store.read(`page-layers/pages/${d.name}/page.json`)).text); } catch (e) { /* skip */ } }
+  renderPages();
+  loadDrafts();
+}
+function showSwitch() {
+  $('switchChip').textContent = SWITCH.off ? 'KILL SWITCH ON: nothing loads' : 'switch: on';
+  $('switchChip').className = 'chip ' + (SWITCH.off ? 'bad' : 'good');
+  $('killBtn').textContent = SWITCH.off ? 'Turn everything back on' : 'Turn everything off';
+}
+function renderPages() {
+  $('pageList').innerHTML = Object.entries(PAGES).map(([pid, p]) =>
+    `<button data-pid="${esc(pid)}" aria-current="${CUR === pid}"><span>${esc(p.title || pid)}</span><span class="chip ${p.status === 'off' ? 'warn' : 'good'}">${p.status === 'off' ? 'off' : 'live'}</span></button>`).join('');
+  $('pageList').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => openPage(b.dataset.pid)));
+}
+
+/* ------------------------------------------------------------------ editor */
+async function openPage(pid) {
+  CUR = pid; renderPages();
+  const p = PAGES[pid];
+  ORIG = { page: json(p), css: {} };
+  ['empty'].forEach((id) => { $(id).hidden = true; });
+  ['pageCard', 'compCard', 'setCard', 'cssCard', 'actCard'].forEach((id) => { $(id).hidden = false; });
+  $('pTitle').textContent = p.title || pid;
+  $('pStatus').textContent = p.status === 'off' ? 'off' : 'live'; $('pStatus').className = 'chip ' + (p.status === 'off' ? 'warn' : 'good');
+  $('fTitle').value = p.title || '';
+  $('fStatus').value = p.status === 'off' ? 'off' : 'live';
+  $('fPaths').value = (p.paths || []).join('\n');
+  $('fSwitch').checked = !!p.newLookSwitch;
+  $('fSettings').value = JSON.stringify(p.settings || {}, null, 2); $('setMsg').textContent = '';
+  $('scopeCode').textContent = p.scope || '';
+  renderComps();
+  const tabs = (p.css || []).map((r) => repoPath(r, pid));
+  for (const t of tabs) { ORIG.css[t] = await readCss(t); }
+  CSS_TAB = tabs[0] || null;
+  renderCssTabs(tabs);
+  msg($('actMsg'), ''); markDirty();
+}
+function renderComps() {
+  const p = PAGES[CUR], chosen = new Set(p.components || []), all = new Set(componentList(p));
+  $('comps').innerHTML = Object.entries(REG).filter(([c, m]) => !m.auto && c !== 'newui').map(([c, m]) => {
+    const auto = all.has(c) && !chosen.has(c);
+    const st = m.status || 'proposed';
+    return `<label class="comp ${auto ? 'auto' : ''}"><input type="checkbox" data-c="${esc(c)}" ${chosen.has(c) || auto ? 'checked' : ''} ${auto ? 'disabled' : ''}>
+      <span><b>${esc(c)}</b> <span class="chip ${st === 'reviewed' ? 'good' : 'warn'}">${esc(st)}</span>${auto ? ' <span class="hint">(needed by another)</span>' : ''}</span>
+      <p>${esc(m.about || '')}</p></label>`;
+  }).join('');
+  $('comps').querySelectorAll('input').forEach((i) => i.addEventListener('change', () => {
+    const set = new Set(PAGES[CUR].components || []);
+    i.checked ? set.add(i.dataset.c) : set.delete(i.dataset.c);
+    PAGES[CUR].components = Object.keys(REG).filter((c) => set.has(c));
+    renderComps(); markDirty();
+  }));
+}
+function renderCssTabs(tabs) {
+  $('cssTabs').innerHTML = tabs.map((t) => `<button role="tab" data-t="${esc(t)}" aria-selected="${t === CSS_TAB}">${esc(t.split('/').pop())}</button>`).join('');
+  $('cssTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { saveCssTab(); CSS_TAB = b.dataset.t; renderCssTabs(tabs); }));
+  $('fCss').value = CSS_TAB ? CSS_CACHE[CSS_TAB] : '';
+  const users = CSS_TAB ? pagesUsing(CSS_TAB) : [];
+  $('cssShared').textContent = users.length > 1 ? `Shared file: changes here affect ${users.length} pages (${users.join(', ')}).` : (CSS_TAB ? 'File: ' + CSS_TAB : 'This page has no CSS files.');
+}
+function saveCssTab() { if (CSS_TAB) CSS_CACHE[CSS_TAB] = $('fCss').value; }
+
+function collect() {          // the page as edited; null if the settings JSON is invalid
+  saveCssTab();
+  const p = { ...PAGES[CUR] };
+  p.title = $('fTitle').value.trim();
+  p.status = $('fStatus').value;
+  p.paths = $('fPaths').value.split('\n').map((s) => s.trim()).filter(Boolean);
+  p.newLookSwitch = $('fSwitch').checked;
+  try { p.settings = JSON.parse($('fSettings').value || '{}'); $('setMsg').textContent = ''; }
+  catch (e) { $('setMsg').innerHTML = '<span style="color:var(--bad)">Settings are not valid JSON: ' + esc(e.message) + '</span>'; return null; }
+  return p;
+}
+function changedFiles() {
+  const p = collect(); if (!p) return null;
+  const files = [];
+  if (json(p) !== ORIG.page) files.push({ path: `page-layers/pages/${CUR}/page.json`, content: json(p) });
+  for (const [path, text] of Object.entries(ORIG.css)) if (CSS_CACHE[path] !== text) files.push({ path, content: CSS_CACHE[path] });
+  return files;
+}
+function markDirty() { const f = changedFiles(); $('dirty').textContent = f === null ? 'fix the settings first' : (f.length ? f.length + ' unsaved change(s)' : 'no changes'); $('saveBtn').disabled = !f || !f.length; }
+['fTitle', 'fStatus', 'fPaths', 'fSwitch', 'fSettings', 'fCss'].forEach((id) => $(id).addEventListener('input', markDirty));
+$('fStatus').addEventListener('change', markDirty); $('fSwitch').addEventListener('change', markDirty);
+
+/* Preview: the same bundle the build makes, from the edits on screen, as one script to paste in the console. */
+$('previewBtn').addEventListener('click', async () => {
+  const p = collect(); if (!p) return;
+  try {
+    const comps = componentList(p);
+    const css = [], js = [];
+    for (const c of comps) { const m = REG[c] || {}; if (m.css) css.push(await readCss(m.css.slice(1))); if (m.file) js.push((await store.read(m.file.slice(1))).text); }
+    for (const r of p.css || []) css.push(await readCss(repoPath(r, CUR)));
+    const newui = (await store.read('css-refresh/newui/newui.js')).text, recolor = (await store.read('css-refresh/theme/recolor.js')).text;
+    const script = `/* Page Layers preview: ${p.title} (unsaved edits from the dashboard, ${new Date().toLocaleString()}). Reload the page to remove it. */\n` +
+      'window.STUDY_PAGE=' + JSON.stringify(p.settings || {}) + ';window.STUDY_NEW_UI=' + JSON.stringify({ inline: { css, js }, recolorSrc: recolor }) + ';\n' + newui;
+    await navigator.clipboard.writeText(script);
+    msg($('actMsg'), `Preview script copied (${Math.round(script.length / 1024)} KB). Open <a href="https://stage-study.com${esc(p.paths[0] || '')}" target="_blank" rel="noopener">the page on stage-study.com</a>, press F12 → Console, paste, Enter.`, 'good');
+  } catch (e) { msg($('actMsg'), 'Could not build the preview: ' + esc(e.message), 'bad'); }
+});
+
+$('saveBtn').addEventListener('click', async () => {
+  const files = changedFiles(); if (!files || !files.length) return;
+  $('saveBtn').disabled = true; msg($('actMsg'), 'Saving draft…');
+  try {
+    const title = `Update ${CUR}`;
+    const d = await store.saveDraft(files, title, `Changed: ${files.map((f) => '`' + f.path + '`').join(', ')}`);
+    PAGES[CUR] = collect(); ORIG.page = json(PAGES[CUR]); for (const f of files) if (f.path in ORIG.css) ORIG.css[f.path] = f.content;
+    msg($('actMsg'), `Draft saved: <a href="${esc(d.url)}" target="_blank" rel="noopener">#${d.number}</a>. The checks are running; publish it from <b>Drafts</b> when they pass.`, 'good');
+    renderPages(); markDirty(); loadDrafts();
+  } catch (e) { msg($('actMsg'), 'Saving failed: ' + esc(e.message), 'bad'); $('saveBtn').disabled = false; }
+});
+
+/* ------------------------------------------------------------------ drafts, publish, kill switch, new page */
+async function loadDrafts() {
+  const el = $('drafts');
+  try {
+    const ds = await store.drafts();
+    el.innerHTML = ds.length ? ds.map((d) => `<li><a href="${esc(d.url)}" target="_blank" rel="noopener">#${d.number}</a> ${esc(d.title)}
+      <span class="chip ${d.state === 'passed' ? 'good' : d.state === 'failed' ? 'bad' : 'warn'}">${esc(d.detail)}</span>
+      <div class="row" style="margin-top:4px"><button data-pub="${d.number}" ${d.state === 'passed' ? '' : 'disabled'}>Publish</button><button data-del="${d.number}">Discard</button></div></li>`).join('') : '<li class="hint">No drafts.</li>';
+    el.querySelectorAll('[data-pub]').forEach((b) => b.addEventListener('click', () => publish(+b.dataset.pub, b)));
+    el.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', async () => { if (confirm('Discard draft #' + b.dataset.del + '?')) { await store.discard(+b.dataset.del); loadDrafts(); } }));
+  } catch (e) { el.innerHTML = `<li class="hint">Couldn't load drafts: ${esc(e.message)}</li>`; }
+}
+async function publish(n, btn) {
+  btn.disabled = true;
+  try { await store.publish(n); alert('Published. The site updates in a minute or two; readers see it within about 5 minutes.'); }
+  catch (e) {
+    const why = /review/i.test(e.message) ? 'This change touches reviewed code, so a code owner must approve it on GitHub first.' : e.message;
+    alert('Not published: ' + why);
+  }
+  loadDrafts();
+  try { SWITCH = JSON.parse((await store.read('switch.json')).text); showSwitch(); } catch (e) { /* ignore */ }
+}
+$('refreshDrafts').addEventListener('click', loadDrafts);
+$('killBtn').addEventListener('click', async () => {
+  const off = !SWITCH.off;
+  const why = prompt(off ? 'Turn the new look OFF on every page. Reason (kept in the history):' : 'Turn the new look back ON. Reason:');
+  if (why === null) return;
+  try {
+    const d = await store.saveDraft([{ path: 'switch.json', content: json({ ...SWITCH, off, note: why }) }], off ? 'Kill switch: everything off' : 'Kill switch: back on', why);
+    msg($('actMsg'), `Kill switch draft <a href="${esc(d.url)}" target="_blank" rel="noopener">#${d.number}</a> saved. Publish it from Drafts once its checks pass (about a minute).`, 'good');
+    loadDrafts();
+  } catch (e) { alert('Failed: ' + e.message); }
+});
+$('newPage').addEventListener('click', async () => {
+  const path = prompt('Page address (after the domain), e.g. /resources/my-new-article.html'); if (!path) return;
+  const id = path.split('/').pop().replace(/\.html?$/, '').replace(/[^a-z0-9-]/gi, '-').toLowerCase();
+  if (PAGES[id]) { alert('A page called ' + id + ' already exists.'); return; }
+  const page = { id, title: prompt('Title', id) || id, paths: [path], scope: 'body#promoArticleMain', status: 'off', newLookSwitch: true, css: [id + '.css'], components: [], settings: {}, owner: '', notes: 'Created from the dashboard. Starts off; turn it live after previewing.' };
+  const css = `/* ${page.title}: page styles. Every rule must start with ${page.scope} */\n${page.scope} #hub {\n}\n`;
+  try {
+    const d = await store.saveDraft([{ path: `page-layers/pages/${id}/page.json`, content: json(page) }, { path: `page-layers/pages/${id}/${id}.css`, content: css }], 'Add page ' + id, 'New page ' + path);
+    PAGES[id] = page; CSS_CACHE[`page-layers/pages/${id}/${id}.css`] = css; renderPages();
+    msg($('actMsg'), `New page draft <a href="${esc(d.url)}" target="_blank" rel="noopener">#${d.number}</a> saved (status: off). Publish it, then edit it here.`, 'good');
+    loadDrafts();
+  } catch (e) { alert('Failed: ' + e.message); }
+});
+
+/* ------------------------------------------------------------------ sign in / out */
+$('signInBtn').addEventListener('click', () => { try { localStorage.setItem(TOKEN_KEY, $('token').value.trim()); } catch (e) { /* ignore */ } location.reload(); });
+$('signOut').addEventListener('click', () => { try { localStorage.removeItem(TOKEN_KEY); } catch (e) { /* ignore */ } location.reload(); });
+boot();
+</script>
+</body>
+</html>

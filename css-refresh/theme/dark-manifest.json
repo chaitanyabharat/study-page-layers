@@ -1,0 +1,83 @@
+{
+ "version": "r3",
+ "images": {
+  "fig1-readiness-self-assessment_-_studyad179546-b6e4-4215-be61-342e444e4d83.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig1-readiness-self-assessment_-_studyad179546-b6e4-4215-be61-342e444e4d83.com-dark.webp"
+  },
+  "fig2-adoption-vs-readiness-gapd239bbe1-9e47-40eb-aacc-4de20666d545.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig2-adoption-vs-readiness-gapd239bbe1-9e47-40eb-aacc-4de20666d545-dark.webp"
+  },
+  "fig3-weekly-time-savings-studya101f6af-e236-4983-b924-653527027606.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig3-weekly-time-savings-studya101f6af-e236-4983-b924-653527027606.com-dark.webp"
+  },
+  "fig4-confidence-to-output-funnel-studya2bd4459-b829-4bbf-a611-fe31561e8f51.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig4-confidence-to-output-funnel-studya2bd4459-b829-4bbf-a611-fe31561e8f51.com-dark.webp"
+  },
+  "fig5-ai-skill-confidence-study12ad7f51-ca49-4614-908c-d31a6d590ef4.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig5-ai-skill-confidence-study12ad7f51-ca49-4614-908c-d31a6d590ef4.com-dark.webp"
+  },
+  "fig6-worker-sentiment-study60f462aa-04fa-4e0e-95c7-711557bd33f4.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig6-worker-sentiment-study60f462aa-04fa-4e0e-95c7-711557bd33f4.com-dark.webp"
+  },
+  "fig7-training-coverage-source-study6b7a4e4d-f2fc-4029-9646-886c0e4448ce.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig7-training-coverage-source-study6b7a4e4d-f2fc-4029-9646-886c0e4448ce.com-dark.webp"
+  },
+  "fig8-clarity-ai-performance-standards-studye6e678d1-2ccc-497c-b886-ffe7037e5f09.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig8-clarity-ai-performance-standards-studye6e678d1-2ccc-497c-b886-ffe7037e5f09.com-dark.webp"
+  },
+  "fig9-training-effectiveness-study3b48f3ac-d006-4dd0-92e1-682343273621.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig9-training-effectiveness-study3b48f3ac-d006-4dd0-92e1-682343273621.com-dark.webp"
+  },
+  "fig10-top-training-gaps-studycbe963fd-a239-4208-9ae0-e97acbf91f60.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig10-top-training-gaps-studycbe963fd-a239-4208-9ae0-e97acbf91f60.com-dark.webp"
+  },
+  "fig11-barriers-to-upskilling-studyfe6a176f-500b-45cb-96d8-653d9a1a0c6d.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig11-barriers-to-upskilling-studyfe6a176f-500b-45cb-96d8-653d9a1a0c6d.com-dark.webp"
+  },
+  "fig12-employer-support-infrastructure-study509c61b6-7d72-4712-9368-1b00fb6475fe.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig12-employer-support-infrastructure-study509c61b6-7d72-4712-9368-1b00fb6475fe.com-dark.webp"
+  },
+  "fig13-four-worker-profiles-study30ae6bdb-6ec4-407f-9a80-ec812ccf0732.com.png": {
+   "policy": "recolor",
+   "faintShare": 0,
+   "textRef": "",
+   "dark": "assets/dark/fig13-four-worker-profiles-study30ae6bdb-6ec4-407f-9a80-ec812ccf0732.com-dark.webp"
+  }
+ }
+}

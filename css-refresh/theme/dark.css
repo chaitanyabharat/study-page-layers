@@ -1,0 +1,42 @@
+/* =========================================================================
+   Dark theme: the parts the color tokens can't reach (prototype)
+   - The page body. The site header and footer are in chrome/chrome.css.
+   - Images: the light mat, the "colors adjusted" note and its button.
+   - Print and Windows high-contrast mode always get the original look.
+   Active only while html[data-theme="dark"] is set by the theme control.
+   ========================================================================= */
+
+@media screen {
+  /* ---------- page ---------- */
+  html[data-theme="dark"]:has(body#promoArticleMain) { background: #061a22; color-scheme: dark; }
+  html[data-theme="dark"] body#promoArticleMain { background: var(--paper); color: var(--ink); }
+  html[data-theme="dark"] body#promoArticleMain ::selection { background: #1d5b70; color: #fff; }
+
+  /* the site header and footer: chrome/chrome.css */
+
+  /* ---------- images ---------- */
+  /* the light mat: the original image on a soft light panel, a little dimmed so it doesn't glare */
+  html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat td { background: var(--mat); }
+  html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat img { filter: brightness(.94); }
+  /* the caption on a matted chart sits on the mat, so it uses light-theme ink */
+  html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat .enh-cap { --ink: #072435; --ink-2: #33464f; --ink-3: #4a5a62; --data: #007bba; --rule: #d0dee4; color: #072435; }
+  html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat .enh-cap__btn { background: #fff; color: #072435; border-color: #c9d3d7; }
+
+  /* "Colors adjusted for dark mode  ·  Show original" */
+  body#promoArticleMain .dk-note { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; flex-basis: 100%; margin-top: 2px;
+    font: 400 12.5px/1.4 var(--f-display); color: var(--ink-3); }
+  body#promoArticleMain .dk-note[hidden] { display: none; }
+  body#promoArticleMain .dk-note::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: conic-gradient(var(--data) 0 50%, var(--ink-3) 0); flex: none; }
+  body#promoArticleMain .dk-note__btn { padding: 2px 0; margin: 0; font: 600 12.5px/1.4 var(--f-display); color: var(--data); background: none; border: 0;
+    text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  body#promoArticleMain .dk-note__btn:focus-visible { outline: 2px solid var(--data); outline-offset: 2px; border-radius: 2px; }
+  html.enh body#promoArticleMain .enh-cap:has(.dk-note:not([hidden])) { flex-wrap: wrap; }
+}
+
+/* ---------- print and high contrast: always the original look ---------- */
+/* print: every rule above is screen-only, and dark-images.js puts the original files back */
+@media print { body#promoArticleMain .dk-note { display: none !important; } }
+@media (forced-colors: active) {
+  html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat img { filter: none; }
+  body#promoArticleMain .dk-note { display: none !important; }
+}

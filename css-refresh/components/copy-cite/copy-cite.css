@@ -1,0 +1,5 @@
+/* Styles for the copy-cite component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body .enh-copy { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 4px 10px; font: 600 12px/1 var(--f-display); letter-spacing: 0; color: var(--ink-3); background: none; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; transition: color .15s, border-color .15s; }
+html.enh:not(#enh) body .enh-copy:hover { color: var(--ink); border-color: var(--ink); }
+html.enh:not(#enh) body .enh-pullstat td > .enh-copy--stat { display: flex; width: max-content; margin-top: 14px; }

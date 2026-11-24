@@ -1,0 +1,188 @@
+{
+  "id": "hardest-college-classes-ranked",
+  "title": "The Gen Ed Anxiety Report: Hardest College Classes, Ranked",
+  "paths": [
+    "/college/resources/hardest-college-classes-ranked.html"
+  ],
+  "scope": "body#cxPromoArticleMain",
+  "status": "draft",
+  "newLookSwitch": true,
+  "css": [
+    "/css-refresh/chrome/chrome.css",
+    "college-article.css"
+  ],
+  "components": [
+    "labels",
+    "summary-figures",
+    "figures",
+    "stat-bars",
+    "stat-waffle",
+    "copy-cite",
+    "heading-links",
+    "contents",
+    "skim",
+    "dark-images"
+  ],
+  "settings": {
+    "enhance": {
+      "when": "body#cxPromoArticleMain",
+      "article": "#mainContainer > .wiki-content",
+      "landmarkFor": "#mainContainer",
+      "title": ".wiki-content h1",
+      "summary": {
+        "selector": "#section---KeyTakeaways"
+      },
+      "backMatter": {
+        "selector": "#section---Methodology"
+      },
+      "figures": {
+        "number": "",
+        "exclude": ""
+      },
+      "source": "Study.com Gen Ed Anxiety Survey, 2026",
+      "components": {
+        "copy-cite": {
+          "pullStats": ""
+        },
+        "contents": {
+          "ariaLabel": "Report contents",
+          "labels": {
+            "section---KeyTakeaways": "Key takeaways",
+            "section---WhichSubjectsAreTheMostFearedEvenBeforeTheyWereTaken": "Most feared before class",
+            "section---HardestCollegeCoursesRankedByExperiencedStressLevels": "Hardest, by stress",
+            "section---EasiestGenEdClassesRankedByLeastAnxietyInducing": "Easiest classes",
+            "section---SelfDoubtIsThePrimaryCauseOfGenEdAnxiety": "Self-doubt",
+            "section---GenEdAnxietyAffectsCollegePerformanceAndOutcomes": "Grades and dropping out",
+            "section---ExtraLearningHoursHelpStudentsCopeWithHardestCollegeCourses": "What helps students cope",
+            "section---Students1TipForGenEdAnxietyAskForHelp": "Ask for help",
+            "section---TheRealityItSMostlyNotTheSubjectItSTheSelfDoubt": "The bottom line",
+            "section---Methodology": "Methodology"
+          },
+          "cta": {
+            "text": "Dreading a gen ed? Take it online, at your own pace, for college credit.",
+            "label": "General education courses",
+            "href": "https://study.com/college/general-education.html"
+          }
+        },
+        "stat-waffle": {
+          "title": "Of every 100 students",
+          "after": ".wiki-content > div > p.description",
+          "views": [
+            {
+              "key": "math",
+              "label": "Dreaded math",
+              "tone": "data",
+              "find": "(\\d+)% of respondents said they dreaded Math the most"
+            },
+            {
+              "key": "doubt",
+              "label": "Self-doubt",
+              "tone": "ink",
+              "find": "(\\d+)% of respondents cited"
+            },
+            {
+              "key": "gpa",
+              "label": "GPA hit",
+              "tone": "signal",
+              "find": "(\\d+)% stating their gen ed anxiety had an effect"
+            },
+            {
+              "key": "quit",
+              "label": "Quit thoughts",
+              "tone": "risk",
+              "find": "(\\d+)% saying they considered dropping out"
+            }
+          ]
+        },
+        "labels": {
+          "items": [
+            {
+              "at": ".wiki-content > div > p.description",
+              "where": "append",
+              "parts": [
+                "Study.com Gen Ed Anxiety Survey",
+                "131 students and recent graduates"
+              ],
+              "class": "byline"
+            },
+            {
+              "at": "#section---KeyTakeaways",
+              "where": "prepend",
+              "text": "At a glance",
+              "class": "kicker",
+              "decorative": true
+            },
+            {
+              "at": "#section---Methodology",
+              "where": "prepend",
+              "text": "About the data",
+              "class": "kicker",
+              "decorative": true
+            }
+          ]
+        }
+      }
+    },
+    "newLook": {
+      "header": ".cx-navigation, nav.cx-hub-nav, nav.study-nav",
+      "group": ".cx-navigation__right, .cx-hub-nav__right, .cx-hub-nav__mobile-top-bar-right, .study-nav__main-actions",
+      "before": ":scope > .cx-navigation__study-ai, :scope > .cx-hub-nav__search, :scope > .cx-hub-nav__mobile-top-bar-search, :scope > #searchBarDesktop, :scope > .search-form, :scope > .searchTrigger",
+      "sections": ".wiki-content > h2[id]"
+    },
+    "darkImages": {
+      "scope": ".wiki-content img, nav.cx-hub-nav img, nav.study-nav img.breakthrough-logo, footer.e2-footer img, .cx-navigation__logo img",
+      "logo": "nav img, footer.e2-footer .e2-footer__company-section, .cx-navigation__logo",
+      "chart": "",
+      "quote": ""
+    }
+  },
+  "owner": "Content team",
+  "notes": "Second pilot, on the College template (cxPromoArticleMain), to show the components are reusable: the same component code as the AI report, with this page's settings above and its own CSS in this folder. Figures are numbered in page order (the file names carry no number) and keep the captions the page already has. The charts are designed infographics with their own dark header, so in dark mode they sit on a light card instead of being recolored. The site serves this page with either the Eureka header (cx-hub-nav, one row per device) or the older study-nav header; signed-in readers get the Eureka 2 nav (.cx-navigation). The settings and chrome.css cover all three.",
+  "expects": [
+    {
+      "selector": "body#cxPromoArticleMain",
+      "count": 1,
+      "why": "the scope every page rule starts with"
+    },
+    {
+      "selector": "#mainContainer > .wiki-content",
+      "count": 1,
+      "why": "the article container the layout and every component use"
+    },
+    {
+      "selector": ".wiki-content > div > h1",
+      "count": 1,
+      "why": "the title"
+    },
+    {
+      "selector": ".wiki-content > div > p.description",
+      "count": 1,
+      "why": "the dek, where the cover chart and byline attach"
+    },
+    {
+      "selector": "#section---KeyTakeaways + ul > li",
+      "count": 4,
+      "why": "the four takeaway cards"
+    },
+    {
+      "selector": "#section---Methodology",
+      "count": 1,
+      "why": "back matter: the contents list and skim mode stop here"
+    },
+    {
+      "selector": ".wiki-content > table.imageplugin--align caption",
+      "count": 6,
+      "why": "six charts, each with its own caption"
+    },
+    {
+      "selector": "nav.cx-hub-nav :is(.cx-hub-nav__right, .cx-hub-nav__mobile-top-bar-right), nav.study-nav .study-nav__main-actions",
+      "min": 1,
+      "why": "where the Display button goes: the Eureka header's row for this device, or the older header the site sometimes serves"
+    },
+    {
+      "selector": "footer.e2-footer",
+      "count": 1,
+      "why": "the Eureka footer, recolored in dark mode"
+    }
+  ]
+}

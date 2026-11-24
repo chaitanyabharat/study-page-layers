@@ -1,0 +1,225 @@
+{
+  "id": "state-of-ai-jobs-and-skills",
+  "title": "State of AI Jobs and Skills Report 2026",
+  "paths": [
+    "/resources/state-of-ai-jobs-and-skills.html"
+  ],
+  "scope": "body#promoArticleMain",
+  "status": "live",
+  "newLookSwitch": true,
+  "css": [
+    "/css-refresh/state-of-ai-article.css",
+    "/css-refresh/enhance/research-hub-placement.css",
+    "/css-refresh/chrome/chrome.css",
+    "/css-refresh/theme/dark.css"
+  ],
+  "components": [
+    "labels",
+    "summary-figures",
+    "figures",
+    "figure-links",
+    "video",
+    "stat-bars",
+    "stat-waffle",
+    "copy-cite",
+    "heading-links",
+    "profile-filter",
+    "reference-links",
+    "contents",
+    "skim",
+    "footer-links",
+    "dark-images"
+  ],
+  "settings": {
+    "enhance": {
+      "components": {
+        "stat-waffle": {
+          "title": "Of every 100 employees",
+          "after": ".hub-content-container > p.description",
+          "views": [
+            {
+              "key": "use",
+              "label": "Use AI",
+              "tone": "data",
+              "find": "\\b(\\d+) in 10 employees use AI at least sometimes",
+              "scale": 10
+            },
+            {
+              "key": "regular",
+              "label": "Regularly",
+              "tone": "ink",
+              "find": "\\((\\d+)%\\) use it regularly"
+            },
+            {
+              "key": "prepared",
+              "label": "Fully prepared",
+              "tone": "signal",
+              "find": "^(\\d+)% describe themselves as fully prepared"
+            },
+            {
+              "key": "untrained",
+              "label": "Never trained",
+              "tone": "risk",
+              "find": "^(\\d+)% of employees have received no AI training"
+            }
+          ]
+        },
+        "contents": {
+          "ariaLabel": "Report contents"
+        },
+        "labels": {
+          "items": [
+            {
+              "at": ".hub-content-container > .pageNavigation",
+              "where": "append",
+              "text": "/  Report",
+              "class": "crumb",
+              "decorative": true
+            },
+            {
+              "at": ".hub-content-container > p.description",
+              "where": "append",
+              "parts": [
+                "Study.com Research with Candova",
+                "Two surveys, ~2,000 employees"
+              ],
+              "class": "byline"
+            },
+            {
+              "at": "#section---KeyFindings",
+              "where": "prepend",
+              "text": "Summary",
+              "class": "kicker",
+              "decorative": true
+            },
+            {
+              "at": "#section---KeyFindings",
+              "where": "append",
+              "text": "{count:#section---KeyFindings ~ h3:not(#section---KeyFindings ~ h2 ~ h3)} things the data says about AI at work in 2026.",
+              "class": "dek",
+              "decorative": true
+            },
+            {
+              "at": "#hub-content > div:has(iframe, .enh-video)",
+              "where": "prepend",
+              "text": "Video summary",
+              "class": "video"
+            },
+            {
+              "at": "#hub-content > p:has(> b:first-child + i):has(+ ul) + ul + p",
+              "all": true,
+              "where": "prepend",
+              "text": "Training priority",
+              "class": "priority"
+            }
+          ]
+        }
+      }
+    },
+    "footer": {
+      "logo": "https://study.com/images/eureka/logos/study-com_logo-horizontal_text-light.svg",
+      "top": [
+        "Plans",
+        "Blog",
+        "Careers",
+        "Teach For Us",
+        "Scholarships",
+        "Contact Support",
+        "FAQ"
+      ]
+    }
+  },
+  "darkImages": {
+    "manifest": "/css-refresh/theme/dark-manifest.json",
+    "folder": "/css-refresh/preview/site/assets/dark"
+  },
+  "owner": "Content team",
+  "notes": "Pilot page. Files are referenced from css-refresh/ so there is one copy; pages made in the dashboard keep their CSS in their own folder. Everything specific to this report is in 'settings' and in the page CSS; the components themselves know nothing about it.",
+  "expects": [
+    {
+      "selector": "body#promoArticleMain",
+      "count": 1,
+      "why": "the scope every page rule starts with"
+    },
+    {
+      "selector": "#hub #hub-content",
+      "count": 1,
+      "why": "the article container the layout and every component use"
+    },
+    {
+      "selector": ".hub-content-container > h1",
+      "count": 1,
+      "why": "the title"
+    },
+    {
+      "selector": ".hub-content-container > p.description",
+      "count": 1,
+      "why": "the dek, where the cover chart and byline attach"
+    },
+    {
+      "selector": "#section---KeyFindings",
+      "count": 1,
+      "why": "the key findings grid and the summary components"
+    },
+    {
+      "selector": "#section---KeyFindings ~ h3:not(#section---KeyFindings ~ h2 ~ h3)",
+      "count": 5,
+      "why": "the five finding cards (the grid places exactly five)"
+    },
+    {
+      "selector": "#hub-content > h2[id^='section---Section']",
+      "count": 6,
+      "why": "chapter openers; the 'Section N' clip is measured per chapter number 1-6"
+    },
+    {
+      "selector": "#section---Methodology",
+      "count": 1,
+      "why": "back matter: the contents list and skim mode stop here"
+    },
+    {
+      "selector": "#hub-content table.imageplugin--align img[src*='fig']:not([src*='_quote'])",
+      "count": 13,
+      "why": "13 charts: captions, the viewer, reserved shapes and dark versions are per chart"
+    },
+    {
+      "selector": "#hub-content img[src*='fig13-']",
+      "count": 1,
+      "why": "the wide Fig. 13 gets a sideways pan on phones"
+    },
+    {
+      "selector": "#hub-content img[src*='_quote']",
+      "min": 1,
+      "why": "quote cards are styled apart from charts"
+    },
+    {
+      "selector": "#hub-content > table:has(img[src*='fig3-']) + p + p + p + p + ul + p + ul",
+      "count": 1,
+      "why": "the two stat strips after Fig. 3 are found by position"
+    },
+    {
+      "selector": "#hub-content > p:has(> b:first-child + i):has(+ ul)",
+      "count": 4,
+      "why": "the four profile cards and the profile filter"
+    },
+    {
+      "selector": "#hub-content > .tablesort-overflow",
+      "min": 1,
+      "why": "pull-stat callouts"
+    },
+    {
+      "selector": "#hub-content > div iframe",
+      "count": 1,
+      "why": "the video, shown as a poster until played"
+    },
+    {
+      "selector": "nav.study-nav .study-nav__main-actions",
+      "count": 1,
+      "why": "where the Display button and the header layout go"
+    },
+    {
+      "selector": "footer#footer > .container-fluid.copyright",
+      "count": 1,
+      "why": "the compact footer's bottom line"
+    }
+  ]
+}

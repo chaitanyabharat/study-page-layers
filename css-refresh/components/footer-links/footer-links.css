@@ -1,0 +1,22 @@
+/* Styles for the footer-links component: the top line, the "All links" button,
+   and the full list shown in place. Gated on footer.ftl (set by the script), so
+   without it the footer shows in full. :not(#ftl) adds one ID of specificity, to
+   sit above the site's own footer rules. Colors come from the page's tokens. */
+.ftl:not(#ftl) .ftl-top { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 26px; }
+.ftl:not(#ftl) .ftl-logo { display: block; flex: none; line-height: 0; }
+.ftl:not(#ftl) .ftl-logo img { height: 30px; width: auto; }
+.ftl:not(#ftl) .ftl-nav { display: flex; flex-wrap: wrap; gap: 6px 20px; flex: 1 1 360px; }
+.ftl:not(#ftl) .ftl-link { display: inline-block; padding: 4px 0; font: 600 14px/1.3 var(--f-display, Arial, sans-serif); text-decoration: none; }
+.ftl:not(#ftl) .ftl-more {
+  display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; margin: 0; border-radius: 10px; cursor: pointer;
+  font: 600 13.5px/1 var(--f-display, Arial, sans-serif); color: inherit; background: transparent; border: 1px solid rgb(255 255 255 / .18);
+}
+.ftl:not(#ftl) .ftl-more:hover { border-color: rgb(255 255 255 / .4); }
+.ftl:not(#ftl) .ftl-more:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.ftl:not(#ftl) .ftl-more svg { width: 13px; height: 13px; transition: rotate .2s; }
+.ftl.ftl-open:not(#ftl) .ftl-more svg { rotate: 180deg; }
+/* the full list: hidden from view until asked for (still in the page) */
+@media screen { .ftl:not(.ftl-open):not(#ftl) > [role="region"] { display: none !important; } }
+@media (prefers-reduced-motion: no-preference) { .ftl.ftl-open:not(#ftl) > [role="region"] { animation: ftl-open .18s ease-out; } }
+@keyframes ftl-open { from { opacity: 0; translate: 0 -6px; } }
+@media print { .ftl:not(#ftl) .ftl-top { display: none; } }

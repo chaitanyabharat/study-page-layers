@@ -1,0 +1,18 @@
+# Changes to these need approval from a code owner before they can publish
+# (turn on "Require review from Code Owners" in the main branch rule; see SETUP.md).
+# Page settings, page CSS and the kill switch are NOT listed, so the content team can publish those
+# as soon as the checks pass.
+# Code owner: @chaitanyabharat. Add more reviewers on the lines below.
+
+/css-refresh/components/          @chaitanyabharat
+/css-refresh/newui/               @chaitanyabharat
+/css-refresh/theme/*.js           @chaitanyabharat
+/css-refresh/tools/               @chaitanyabharat
+/page-layers/components/          @chaitanyabharat
+/page-layers/governance/          @chaitanyabharat
+/page-layers/tools/               @chaitanyabharat
+/page-layers/config.json          @chaitanyabharat
+/admin/                           @chaitanyabharat
+/build.py                         @chaitanyabharat
+/layers.config.json               @chaitanyabharat
+/.github/                         @chaitanyabharat

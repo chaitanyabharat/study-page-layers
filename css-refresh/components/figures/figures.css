@@ -1,0 +1,50 @@
+/* Styles for the figures component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body :is(.enh-chip, .enh-copy, .enh-iconbtn, .enh-fab, .enh-skim, .enh-cap__btn, .enh-video, .enh-anchor):focus-visible { outline: 2px solid var(--data); outline-offset: 2px; }
+html.enh:not(#enh) body .enh-chart img { cursor: zoom-in; }
+html.enh:not(#enh) body .enh-chart .enh-cap { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: 4px 14px; padding: 14px 18px 15px; background: var(--surface); border-top: 1px solid var(--rule); text-align: left; }
+html.enh:not(#enh) body .enh-chart caption.enh-cap-host { caption-side: bottom; padding: 0; text-align: left; }
+html.enh:not(#enh) body .enh-cap__n { font: 600 12px/1.6 var(--f-data); letter-spacing: .04em; color: var(--ink); white-space: nowrap; }
+html.enh:not(#enh) body .enh-cap__t { font: 400 14.5px/1.5 var(--f-display); color: var(--ink-2); text-wrap: pretty; }
+html.enh:not(#enh) body .enh-cap__btn { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 10px; font: 600 12.5px/1 var(--f-display); color: var(--ink); background: none; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; }
+html.enh:not(#enh) body .enh-cap__btn:hover { border-color: var(--ink); }
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-chart .enh-cap { grid-template-columns: minmax(0, 1fr) auto; padding: 12px 16px 14px; }
+}
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-cap__n { grid-column: 1 / -1; }
+}
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-cap__btn span { display: none; }
+}
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-cap__btn { width: 36px; height: 36px; justify-content: center; padding: 0; }
+}
+html.enh:not(#enh) body dialog.enh-viewer { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #04161e; color: #fff; display: none; grid-template-rows: auto minmax(0, 1fr) auto; }
+html.enh:not(#enh) body dialog.enh-viewer[open] { display: grid; }
+html.enh:not(#enh) body dialog.enh-viewer::backdrop { background: rgb(4 22 30 / .92); }
+html.enh:not(#enh) body .enh-viewer__bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 14px 16px 12px 20px; border-bottom: 1px solid rgb(255 255 255 / .12); }
+html.enh:not(#enh) body .enh-viewer__n { display: block; font: 500 12px/1.4 var(--f-data); letter-spacing: .05em; color: var(--signal); }
+html.enh:not(#enh) body .enh-viewer__t { margin: 4px 0 0; max-width: 70ch; font: 500 15px/1.45 var(--f-display); color: #e9ebf0; }
+html.enh:not(#enh) body .enh-viewer__tools { display: flex; gap: 6px; flex: none; }
+html.enh:not(#enh) body .enh-viewer.is-darkimg .enh-viewer__img { background: #0c2631; }
+html.enh:not(#enh) body .enh-viewer__stage { overflow: auto; display: grid; place-items: center; padding: 16px; overscroll-behavior: contain; }
+html.enh:not(#enh) body .enh-viewer__img { display: block; max-width: 100%; max-height: calc(100dvh - 150px); width: auto; height: auto; border-radius: 6px; cursor: zoom-in; background: #fff; }
+html.enh:not(#enh) body .enh-viewer.is-zoomed .enh-viewer__stage { place-items: start; }
+html.enh:not(#enh) body .enh-viewer.is-zoomed .enh-viewer__img { max-width: none; max-height: none; width: 1400px; cursor: zoom-out; }
+html.enh:not(#enh) body .enh-viewer__hint { margin: 0; padding: 10px 20px 14px; font: 400 12.5px/1.4 var(--f-data); color: rgb(255 255 255 / .6); }
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-viewer__bar { flex-direction: column; padding: 12px 14px; }
+}
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-viewer__t { font-size: 14px; }
+}
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-viewer__stage { padding: 8px; }
+}
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-viewer__img { max-height: calc(100dvh - 200px); }
+}
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-viewer.is-zoomed .enh-viewer__img { width: 1000px; }
+}

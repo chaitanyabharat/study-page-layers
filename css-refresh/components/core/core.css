@@ -1,0 +1,46 @@
+/* Shared by every enhancement: default tokens, focus rings, chips, icon buttons, toast, highlight pulse, print.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+/* Default design tokens and layout numbers. :where() gives them zero specificity,
+   so any page that defines its own tokens (on body, html or a wrapper) wins.
+   Layout numbers the scripts read: --enh-rail-* (contents rail), --enh-scroll-offset. */
+:where(html.enh) {
+  --enh-rail-gap: 40; --enh-rail-edge: 16; --enh-rail-min: 196; --enh-rail-max: 232; --enh-scroll-offset: 140;
+  --paper: #ffffff; --surface: #ffffff; --ink: #072435; --ink-2: #374f5c; --ink-3: #627680; --rule: #d0dee4; --track: #d6e3ea;
+  --data: #007bba; --signal: #ffc340; --risk: #a35400; --inverse: #072435; --on-inverse: #ffffff;
+  --f-title: "Poppins", "Helvetica Neue", Arial, sans-serif; --f-display: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --f-body: Georgia, "Times New Roman", serif; --f-data: ui-monospace, Consolas, monospace;
+}
+html.enh:not(#enh) body .enh-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+html.enh-lock { overflow: hidden; }
+html.enh:not(#enh) body .enh-ico { width: 1em; height: 1em; flex: none; fill: currentColor; }
+@media screen {
+  html.enh:not(#enh) body .enh-off { display: none !important; }
+}
+@keyframes enh-flash { 0% { box-shadow: 0 0 0 0 rgb(255 195 64 / .0); background-color: rgb(255 195 64 / .28); } 100% { box-shadow: 0 0 0 14px rgb(255 195 64 / 0); background-color: transparent; } }
+html.enh:not(#enh) body .enh-flash { animation: enh-flash 1.8s ease-out 1; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) {
+  html.enh:not(#enh) body .enh-flash { animation: none; outline: 3px solid var(--signal); outline-offset: 4px; }
+}
+html.enh:not(#enh) body .enh-chip { display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 6px 12px; font: 600 13px/1.1 var(--f-display); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; transition: background-color .15s, border-color .15s, color .15s; }
+html.enh:not(#enh) body .enh-chip:hover { border-color: var(--ink-3); }
+html.enh:not(#enh) body .enh-chip[aria-pressed="true"] { background: var(--inverse); border-color: var(--inverse); color: var(--on-inverse); }
+html.enh:not(#enh) body .enh-chip[data-tone]::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--tone); }
+html.enh:not(#enh) body .enh-chip[data-tone="data"] { --tone: var(--data); }
+html.enh:not(#enh) body .enh-chip[data-tone="ink"] { --tone: var(--ink); }
+html.enh:not(#enh) body .enh-chip[data-tone="signal"] { --tone: var(--signal); }
+html.enh:not(#enh) body .enh-chip[data-tone="risk"] { --tone: var(--risk); }
+html.enh:not(#enh) body .enh-chip[data-tone="ink"][aria-pressed="true"]::before { background: var(--on-inverse); }
+html.enh:not(#enh) body .enh-iconbtn { display: inline-grid; place-items: center; width: 40px; height: 40px; font-size: 20px; color: inherit; background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .14); border-radius: 10px; cursor: pointer; }
+html.enh:not(#enh) body .enh-iconbtn:hover { background: rgb(255 255 255 / .16); }
+html.enh:not(#enh) body .enh-iconbtn[aria-pressed="true"] { background: var(--signal); color: #072435; border-color: var(--signal); }
+html.enh:not(#enh) body .enh-iconbtn[hidden] { display: none; }
+html.enh:not(#enh) body .enh-toast { position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 1200; translate: -50% 12px; opacity: 0; pointer-events: none; max-width: calc(100vw - 32px); padding: 10px 16px; border-radius: 999px; background: var(--inverse); color: var(--on-inverse); font: 500 14px/1.3 var(--f-display); box-shadow: 0 10px 28px -10px rgb(7 36 48 / .6); transition: opacity .2s, translate .2s; }
+html.enh:not(#enh) body .enh-toast.is-on { opacity: 1; translate: -50% 0; }
+
+/* Motion: nothing the components add moves for readers who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  html.enh:not(#enh) body :is([class^="enh-"], [class*=" enh-"]), html.enh:not(#enh) body :is([class^="enh-"], [class*=" enh-"]) * {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; transition-delay: 0s !important;
+  }
+}
