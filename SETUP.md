@@ -24,7 +24,7 @@ Allow about an hour. Steps 1–3 are needed whichever host you pick. Then do **4
 
 1. Add the reviewer's name under `engineering` in `page-layers/governance/people.json`. It has to be `engineering`, because `newui` has approved exceptions to the rules. Replace the placeholder names in that file while you're there.
 2. Approve `newui`. Either:
-   - **Without Python:** Actions → **approve component** → Run workflow, with component `newui` and your name. Only repo admins can run it. It commits the approval and redeploys.
+   - **Without Python:** Actions → **approve component** → Run workflow, with component `newui` and your name. Only repo admins can run it. It opens a pull request with the approval; merge it to publish.
    - **Locally:** run `python page-layers/tools/cli.py approve newui --by "Your Name"`, then `python page-layers/tools/cli.py check`. Commit and push.
 
 The approver can't be the component's author; `cli.py` enforces this. The rules file (`governance/policy.json`) is already signed and doesn't need re-approving.

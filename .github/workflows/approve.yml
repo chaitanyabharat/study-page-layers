@@ -1,6 +1,6 @@
 # Approve a component without Python on your own machine: Actions → approve component → Run workflow.
-# Only repository admins can run it. The approval (reviewer name, date, fingerprint) is committed to main,
-# then the site is rebuilt and deployed.
+# Only repository admins can run it. The approval (reviewer name, date, fingerprint) is opened as a pull request;
+# merging it publishes.
 name: approve component
 on:
   workflow_dispatch:
@@ -41,17 +41,19 @@ jobs:
           NOTE: ${{ inputs.note }}
         run: python page-layers/tools/cli.py approve "$COMPONENT" --by "$REVIEWER" --note "$NOTE (approved by GitHub user ${{ github.actor }})"
       - run: python page-layers/tools/cli.py check
-      - name: Commit the approval
+      - name: Open a pull request with the approval (main is protected; merge it to publish)
         env:
           COMPONENT: ${{ inputs.component }}
           REVIEWER: ${{ inputs.reviewer }}
+          GH_TOKEN: ${{ github.token }}
         run: |
+          branch="approve/$COMPONENT-${{ github.run_id }}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
           git add -A page-layers
           git commit -m "Approve component $COMPONENT (reviewer: $REVIEWER, run by ${{ github.actor }})"
-          git push
-      - name: Deploy (pushes made by this workflow don't start other workflows on their own)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-pages.yml --ref main
+          git push -u origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Approve component $COMPONENT" \
+            --body "Approval recorded by the **approve component** workflow, run by @${{ github.actor }} as reviewer $REVIEWER. Merge to publish; the site redeploys automatically."
