@@ -4,30 +4,30 @@
     "file": "/css-refresh/newui/newui.js",
     "about": "The New look switch, the Display panel and the color theme. Added automatically to pages with newLookSwitch on. Settings: newLook.",
     "auto": true,
-    "size_kb_gzip": 7.8,
+    "size_kb_gzip": 8.3,
     "author": "prototype",
     "status": "reviewed",
     "allow": {
       "script-injection": "It is the New look loader: it adds the page's own reviewed component scripts, from the manifest and with integrity hashes, when the reader is on the new look.",
       "size": "Granted by Chaitanya Indupuri, 24 Nov 2026: 8.3 KB gzipped as source because of its long explanatory comments; it ships minified inside each page bundle, well under the limit."
     },
-    "sha256": "476ae4e513e80545fa42e3389788f04fa00d0abb104d1a1f2212bab53956bb61",
-    "reviewed_by": "eng-lead",
+    "sha256": "0e6c5fc70723ae0961151abf43fbab95187651e19540346d489fcfc5ac0d9057",
+    "reviewed_by": "Chaitanya Indupuri",
     "review_role": "engineering",
     "engineering": true,
-    "reviewed_on": "2026-10-19",
+    "reviewed_on": "2026-11-24",
     "scan": {
       "error": 0,
       "warn": 4,
-      "info": 2
+      "info": 3
     },
     "acknowledged": [
       "html-dynamic line 178",
       "html-dynamic line 193",
       "html-dynamic line 221",
-      "navigation line 347"
+      "navigation line 368"
     ],
-    "review_note": "Second page (College template): general fixes found by reusing the components"
+    "review_note": "Re-approved for the first GitHub Pages deploy, with the size exception granted by the reviewer (approved by GitHub user chaitanyabharat)"
   },
   "recolor": {
     "file": "/css-refresh/theme/recolor.js",
