@@ -61,3 +61,18 @@ Page CSS and settings rely on CMS8's HTML. Each page now lists what it relies on
 - **Command:** `python tools/cli.py markup [page] [--url URL]` runs the check.
 - **Daily job:** the GitHub workflow runs it every day against the live pages, so a renamed heading, re-exported chart or edited sentence fails the same day.
 - **Pilot page:** all 24 checks pass on the live article today.
+
+## Design-language review (Nov 27, 2026)
+
+We reviewed the Eureka design-system reference we were given: its tokens, type scale, spacing, radii, motion and component guidelines. It is an older version of the design language and hasn't been updated to the current v2/v3 standards, so we aren't changing Page Layers to match it.
+
+Page Layers already follows the parts of it that matter:
+
+- the same palette: text `#374f5c` and `#627680`, links `#007bba`, CTA yellow `#ffc340`, navy `#072435`
+- Poppins and Inter
+- the same breakpoints (767 / 768–1279 / 1280px)
+- underlined links and visible focus
+- `data-cname` on every control
+- no emoji, and status never shown by colour alone
+
+The remaining differences are deliberate choices for long-form CMS8 articles: heading face and colour, reading size and width, radii, shadows, motion, chart colours and token names. We'll revisit them when an updated Eureka reference is available.
