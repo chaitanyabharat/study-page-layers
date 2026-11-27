@@ -5,6 +5,7 @@
 
 Output:
   dist/site/                 the public website. Upload or deploy this folder as the host's root.
+    index.html               the home page: status, listed pages, links (made from home/index.html)
     pl.js                    the lookup file: which pages have a new look, plus the kill switch. Cache 5 min.
     pages/<id>.<hash>.js     each page's new look. The name changes whenever it changes. Cache 1 year.
     admin/                   the dashboard (sign-in needed to change anything)
@@ -118,6 +119,28 @@ AddType text/javascript .js
     f"<!-- Study.com Page Layers, hosted on {host}. The same block works on every page: the host decides what loads. "
     "Keep it at the top of the article body. -->\n"
     f'<script src="https://{host}/pl.js"></script>\n\n}}]\n', encoding="utf-8", newline="\n")
+
+# 6. The site's home page: status, listed pages, links to the dashboard and repo
+import html, datetime  # noqa: E402
+listed = {}
+for path, file in pages.items():
+    listed.setdefault(file, []).append(path)
+items = "".join(
+    "<li>" + ", ".join(f'<a href="https://study.com{html.escape(p)}">study.com{html.escape(p)}</a>' for p in sorted(ps)) + "</li>"
+    for ps in listed.values())
+repo_url = f"https://github.com/{cfg['repo']}"
+home = (ROOT / "home" / "index.html").read_text(encoding="utf-8")
+for key, val in {
+    "{{STATUS}}": ('<span class="status off">Kill switch ON: nothing loads on any page</span>' if manifest["off"]
+                   else f'<span class="status on">On</span> {len(listed)} page(s) listed'),
+    "{{PAGES}}": f"<ul>{items}</ul>" if items else "<p>No pages are switched on.</p>",
+    "{{EMBED}}": html.escape(f'[{{Embed\n<script src="https://{host}/pl.js"></script>\n}}]'),
+    "{{BUILT}}": datetime.datetime.now(datetime.timezone.utc).strftime("%b %d, %Y %H:%M UTC"),
+    "{{REPO_URL}}": html.escape(repo_url),
+    "{{REPO}}": html.escape(cfg["repo"]),
+}.items():
+    home = home.replace(key, val)
+(site / "index.html").write_text(home, encoding="utf-8", newline="\n")
 
 print("\n".join(report))
 print(f"pl.js: {len(pages)} address(es) listed; switch {'OFF - nothing loads' if manifest['off'] else 'on'}"

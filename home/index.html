@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Study.com Page Layers</title>
+<!-- Home page of the Page Layers host. build.py fills in the {{…}} values. -->
+<style>
+:root{--ink:#072435;--ink2:#374f5c;--muted:#5d717b;--rule:#d6e3ea;--bg:#f4f8fa;--surface:#fff;--blue:#007bba;--good:#1f7a3f;--bad:#b3261e;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--ink:#eaf2f4;--ink2:#bccad0;--muted:#8fa4ac;--rule:#1f3c48;--bg:#051820;--surface:#0b2530;--blue:#5cb8ec;--good:#6fd197;--bad:#ff8a80;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink2);font:16px/1.55 Inter,"Segoe UI",Arial,sans-serif}
+main{max-width:720px;margin:0 auto;padding:40px 16px 56px}
+h1,h2{color:var(--ink);font-family:Poppins,"Segoe UI",Arial,sans-serif;line-height:1.2}
+h1{font-size:28px;margin:0 0 8px}
+h2{font-size:18px;margin:32px 0 10px}
+p{margin:0 0 12px}
+a{color:var(--blue)}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;margin:12px 0}
+.status{display:inline-block;font-weight:600;padding:2px 10px;border-radius:999px;border:1px solid currentColor}
+.on{color:var(--good)}.off{color:var(--bad)}
+ul{margin:0;padding-left:20px}
+li{margin:4px 0;overflow-wrap:anywhere}
+pre{margin:0;background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:12px;overflow-x:auto;font:13px/1.5 ui-monospace,Consolas,monospace;color:var(--ink)}
+.btn{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:8px;margin:4px 8px 4px 0}
+@media (prefers-color-scheme:dark){.btn{background:var(--blue);color:#051820}}
+.muted{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Study.com Page Layers</h1>
+  <p>This site serves the new look (CSS and small reviewed scripts) for selected Study.com articles. Articles load it with one line in CMS8; pages that aren't listed here stay exactly as they are.</p>
+
+  <div class="card">
+    <p><strong>Status:</strong> {{STATUS}}</p>
+    <p class="muted">Built {{BUILT}} from <a href="{{REPO_URL}}">{{REPO}}</a>.</p>
+  </div>
+
+  <h2>Pages with a new look</h2>
+  <div class="card">{{PAGES}}</div>
+
+  <h2>Manage</h2>
+  <p><a class="btn" href="admin/">Open the dashboard</a><a class="btn" href="{{REPO_URL}}">View the repository</a></p>
+  <p class="muted">The dashboard needs a GitHub access token for this repository. Changes are saved as drafts and publish once the automatic checks pass.</p>
+
+  <h2>Turn a page on in CMS8</h2>
+  <p>Paste this at the very top of the article body, then save. It's the same for every page.</p>
+  <pre>{{EMBED}}</pre>
+
+  <h2>Turn it off</h2>
+  <ul>
+    <li>Everything: the kill switch in the dashboard (takes effect within about 5 minutes).</li>
+    <li>One page view: add <code>?layers=off</code> to the page address.</li>
+    <li>One page for good: delete the Embed line in CMS8, or switch the page off in the dashboard.</li>
+  </ul>
+</main>
+</body>
+</html>
