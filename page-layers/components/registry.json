@@ -52,14 +52,14 @@
     "file": "/css-refresh/components/core/core.js",
     "css": "/css-refresh/components/core/core.css",
     "about": "Shared base for the enhancement components: page model, helpers, default tokens. Added automatically. Settings: enhance.",
-    "size_kb_gzip": 6.6,
+    "size_kb_gzip": 6.7,
     "author": "prototype",
     "status": "reviewed",
-    "sha256": "1c0d031904ac002481e8c2c26554712b9e2ac2dbb63790c699208ceb0f99dbd4",
-    "reviewed_by": "eng-lead",
+    "sha256": "07f58666819faf20856a56920a5cb3e01aee59b0f18977ac0621136d8ece1ba9",
+    "reviewed_by": "Chaitanya Indupuri",
     "review_role": "engineering",
     "engineering": true,
-    "reviewed_on": "2026-10-19",
+    "reviewed_on": "2026-11-28",
     "scan": {
       "error": 0,
       "warn": 2,
@@ -69,7 +69,7 @@
       "html-dynamic line 62",
       "html-dynamic line 98"
     ],
-    "review_note": "Second page (College template): general fixes found by reusing the components"
+    "review_note": "Re-approved on Chaitanya Indupuri's instruction for PR #2 (engagement-content fixes). Changes written by Claude, scanned (no errors; warnings unchanged in substance) and tested on staging guide pages, phone width and dark mode; AI report and Hardest Classes checked for regressions."
   },
   "labels": {
     "file": "/css-refresh/components/labels/labels.js",
@@ -122,21 +122,21 @@
       "core"
     ],
     "about": "A caption under each figure from its alt text, and a full-screen viewer with zoom.",
-    "size_kb_gzip": 2.9,
+    "size_kb_gzip": 3.0,
     "author": "prototype",
     "status": "reviewed",
-    "sha256": "65e2b4cdfda4ce2be3cb846ea52401da5246cbdae908493bd5089f8dc5a39995",
-    "reviewed_by": "eng-lead",
+    "sha256": "020480a3e750b681155392f0378e4b3b7c68d4c4e65baa63c0992c32820befdf",
+    "reviewed_by": "Chaitanya Indupuri",
     "review_role": "engineering",
     "engineering": true,
-    "reviewed_on": "2026-10-19",
+    "reviewed_on": "2026-11-28",
     "scan": {
       "error": 0,
       "warn": 0,
       "info": 0
     },
     "acknowledged": [],
-    "review_note": "Second page (College template): general fixes found by reusing the components"
+    "review_note": "Re-approved on Chaitanya Indupuri's instruction for PR #2 (engagement-content fixes). Changes written by Claude, scanned (no errors; warnings unchanged in substance) and tested on staging guide pages, phone width and dark mode; AI report and Hardest Classes checked for regressions."
   },
   "figure-links": {
     "file": "/css-refresh/components/figure-links/figure-links.js",
@@ -328,21 +328,33 @@
       "core"
     ],
     "about": "Contents rail beside the article when it fits, or a Contents button and sheet. Reading time and section tracking.",
-    "size_kb_gzip": 5.0,
+    "size_kb_gzip": 5.5,
     "author": "prototype",
     "status": "reviewed",
-    "sha256": "aa8ed858e5dfbece04a4d46aa66fbec31008d25738e5d1789443b2bb0130e790",
-    "reviewed_by": "eng-lead",
+    "sha256": "54a0d36679628957b997e628dae009ca9762711235344ebfc0231415d556a4b2",
+    "reviewed_by": "Chaitanya Indupuri",
     "review_role": "engineering",
     "engineering": true,
-    "reviewed_on": "2026-10-19",
+    "reviewed_on": "2026-11-28",
     "scan": {
       "error": 0,
       "warn": 0,
       "info": 0
     },
     "acknowledged": [],
-    "review_note": "Contents: marker + progress, no track, no scrollbar; cover chart linked to findings, sticky card wrapper"
+    "review_note": "Re-approved on Chaitanya Indupuri's instruction for PR #2 (engagement-content fixes). Changes written by Claude, scanned (no errors; warnings unchanged in substance) and tested on staging guide pages, phone width and dark mode; AI report and Hardest Classes checked for regressions."
+  },
+  "tables": {
+    "file": "/css-refresh/components/tables/tables.js",
+    "css": "/css-refresh/components/tables/tables.css",
+    "needs": [
+      "core"
+    ],
+    "about": "Wide data tables scroll sideways in their own box (never the page), with edge shadows, a Swipe hint and the first column kept in view on phones. Found on engagement pages, Nov 27, 2026.",
+    "author": "Claude",
+    "status": "proposed",
+    "proposed_on": "2026-11-27",
+    "size_kb_gzip": 2.1
   },
   "skim": {
     "file": "/css-refresh/components/skim/skim.js",
@@ -351,24 +363,24 @@
       "core"
     ],
     "about": "Skim mode: openers, charts and key stats only. Its switch joins the contents rail when that component is on.",
-    "size_kb_gzip": 2.3,
+    "size_kb_gzip": 2.7,
     "author": "prototype",
     "status": "reviewed",
-    "sha256": "7a37f23369e76cef59b8aef090960f9511a27c7fadc8d22d14123e84751b7631",
-    "reviewed_by": "eng-lead",
+    "sha256": "46dc9f82af8c7fff53b4ad427cc55a2fc03e229d8bc5266197482eab3245fdde",
+    "reviewed_by": "Chaitanya Indupuri",
     "review_role": "engineering",
     "engineering": true,
-    "reviewed_on": "2026-10-16",
+    "reviewed_on": "2026-11-28",
     "scan": {
       "error": 0,
       "warn": 2,
       "info": 0
     },
     "acknowledged": [
-      "storage-dynamic line 35",
-      "storage-dynamic line 51"
+      "storage-dynamic line 49",
+      "storage-dynamic line 65"
     ],
-    "review_note": "initial library, reviewed at setup"
+    "review_note": "Re-approved on Chaitanya Indupuri's instruction for PR #2 (engagement-content fixes). Changes written by Claude, scanned (no errors; warnings unchanged in substance) and tested on staging guide pages, phone width and dark mode; AI report and Hardest Classes checked for regressions."
   },
   "footer-links": {
     "file": "/css-refresh/components/footer-links/footer-links.js",

@@ -19,7 +19,7 @@
   html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat td { background: var(--mat); }
   html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat img { filter: brightness(.94); }
   /* the caption on a matted chart sits on the mat, so it uses light-theme ink */
-  html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat .enh-cap { --ink: #072435; --ink-2: #33464f; --ink-3: #4a5a62; --data: #007bba; --rule: #d0dee4; color: #072435; }
+  html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat .enh-cap { --ink: #072435; --ink-2: #33464f; --ink-3: #4a5a62; --data: #007bba; --rule: #d0dee4; --surface: var(--mat); background: var(--mat); color: #072435; }
   html[data-theme="dark"] body#promoArticleMain #hub #hub-content > table.dk-mat .enh-cap__btn { background: #fff; color: #072435; border-color: #c9d3d7; }
 
   /* "Colors adjusted for dark mode  ·  Show original" */
