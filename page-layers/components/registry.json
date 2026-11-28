@@ -344,6 +344,18 @@
     "acknowledged": [],
     "review_note": "Contents: marker + progress, no track, no scrollbar; cover chart linked to findings, sticky card wrapper"
   },
+  "tables": {
+    "file": "/css-refresh/components/tables/tables.js",
+    "css": "/css-refresh/components/tables/tables.css",
+    "needs": [
+      "core"
+    ],
+    "about": "Wide data tables scroll sideways in their own box (never the page), with edge shadows, a Swipe hint and the first column kept in view on phones. Found on engagement pages, Nov 27, 2026.",
+    "author": "Claude",
+    "status": "proposed",
+    "proposed_on": "2026-11-27",
+    "size_kb_gzip": 2.1
+  },
   "skim": {
     "file": "/css-refresh/components/skim/skim.js",
     "css": "/css-refresh/components/skim/skim.css",

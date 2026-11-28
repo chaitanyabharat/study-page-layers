@@ -1,0 +1,26 @@
+/* Styles for the tables component. Gated on html.enh (set by the core), so nothing applies without the script.
+   No page-specific selectors: the same specificity as before, through :not(#enh). */
+html.enh:not(#enh) body .enh-table { position: relative; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+html.enh:not(#enh) body .enh-table--self { display: block; }
+html.enh:not(#enh) body .enh-table:focus-visible { outline: 2px solid var(--data); outline-offset: 2px; }
+/* shadows on whichever side has more to see (they move with the scroll position, no script needed) */
+html.enh:not(#enh) body .enh-table.is-scrollable { background:
+  linear-gradient(to right, var(--surface) 30%, transparent) left / 24px 100% no-repeat local,
+  linear-gradient(to left, var(--surface) 30%, transparent) right / 24px 100% no-repeat local,
+  radial-gradient(farthest-side at 0 50%, rgb(7 36 53 / .2), transparent) left / 10px 100% no-repeat scroll,
+  radial-gradient(farthest-side at 100% 50%, rgb(7 36 53 / .2), transparent) right / 10px 100% no-repeat scroll; }
+html.enh:not(#enh) body .enh-table__hint { display: none; }
+html.enh:not(#enh) body .enh-table.is-scrollable:not(.was-scrolled) > .enh-table__hint { position: sticky; left: 0; display: table; margin: 0 0 6px auto; padding: 3px 8px; font: 600 11px/1.4 var(--f-data); letter-spacing: .04em; color: #072435; background: var(--signal); border-radius: 4px; }
+html.enh:not(#enh) body .enh-table__hint::after { content: " \2192"; }
+/* dark theme: the site's own light row stripes and header fills would sit under light text, so the table takes the theme's colours */
+@media screen {
+  html.enh[data-theme="dark"]:not(#enh) body .enh-table :is(th, td) { background-color: var(--surface); color: var(--ink); border-color: var(--rule); }
+  html.enh[data-theme="dark"]:not(#enh) body .enh-table th { color: var(--ink); font-weight: 600; }
+  html.enh[data-theme="dark"]:not(#enh) body .enh-table tr:nth-child(even) > td { background-color: color-mix(in srgb, var(--surface) 90%, #ffffff); }
+}
+@media (max-width: 767.9px) {
+  /* readable columns: no one-word-per-line cells; the box scrolls instead */
+  html.enh:not(#enh) body .enh-table:not(.enh-table--self) .enh-table__t { width: max-content; max-width: none; }
+  html.enh:not(#enh) body .enh-table__t :is(th, td) { min-width: 9.5em; max-width: 17em; }
+  html.enh:not(#enh) body .enh-table--sticky.is-scrollable :is(th, td):first-child { position: sticky; left: 0; z-index: 1; min-width: 7.5em; max-width: 40vw; background: var(--surface); box-shadow: 1px 0 0 var(--rule); }
+}

@@ -30,7 +30,7 @@
     article: '#hub-content',                     // the element whose children are the article's blocks
     landmarkFor: '#hub',                         // gets role="main" if the template has no main landmark
     title: '.hub-content-container > h1, h1',
-    summary: { selector: '#section---KeyFindings', text: '^(key findings|summary|at a glance)\\b' },
+    summary: { selector: '#section---KeyFindings', text: '^(key (findings|takeaways)|summary|at a glance)\\b' },
     backMatter: { selector: '#section---Methodology', text: '^(methodology|about (the|this) (data|research|survey))\\b' },
     figures: {
       block: 'table.imageplugin--align',         // the element that holds one image
@@ -166,12 +166,16 @@
     if (figs) return figs;
     const f = cfg().figures, num = rx(f.number), skip = rx(f.exclude), pre = rx(f.altPrefix);
     figs = []; let order = 0;
-    blocks().filter((n) => n.matches(f.block)).forEach((b) => {
-      const img = $(f.image, b); if (!img) return;
+    const holders = blocks().filter((n) => n.matches(f.block) && $(f.image, n));
+    /* a page whose image files don't follow the naming pattern at all is numbered in page order,
+       instead of every image being taken for a quote card */
+    const named = !!num && holders.some((b) => num.test($(f.image, b).getAttribute('src') || ''));
+    holders.forEach((b) => {
+      const img = $(f.image, b);
       const src = img.getAttribute('src') || '';
       if (skip && skip.test(src)) { b.classList.add('enh-quote'); return; }
       /* the number comes from the file name; with no number pattern set, figures are numbered in page order */
-      const m = num ? src.match(num) : [null, String(++order)];
+      const m = named ? src.match(num) : [null, String(++order)];
       if (!m) { b.classList.add('enh-quote'); return; }
       const n = Number(m[1]);
       if (!b.id) b.id = f.idPrefix + n;

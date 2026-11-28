@@ -16,7 +16,8 @@
 StudyEnh.define('contents', {
   label: 'Contents',
   ariaLabel: 'Contents',
-  levels: 'H2',
+  levels: 'auto',                               // 'auto': H2, or H2 + H3 when there are too few H2 chapters; or a list like 'H2,H3'
+  maxLabel: 70,                                // longer headings are shortened in the list (the full text stays as a tooltip)
   stripPrefix: '^Section\\s+\\d+\\s*:\\s*',    // removed from heading text in the list
   includeSummary: true, includeBackMatter: true,
   labels: {}, marks: {}, summaryMark: '—', backMatterMark: '§',
@@ -25,10 +26,23 @@ StudyEnh.define('contents', {
   minEntries: 3,
 }, (E, opt) => {
   const { el, tag, $, $$ } = E;
-  const m = E.model(), kids = E.blocks(), levels = opt.levels.split(',').map((s) => s.trim().toUpperCase());
+  const m = E.model(), kids = E.blocks();
+  const chapters = (tag) => kids.filter((n) => n.tagName === tag && n !== m.summary && n !== m.backMatter).length;
+  const levels = String(opt.levels).toLowerCase() === 'auto'
+    ? (chapters('H2') >= opt.minEntries ? ['H2'] : ['H2', 'H3'])
+    : opt.levels.split(',').map((s) => s.trim().toUpperCase());
   const strip = E.rx(opt.stripPrefix), idx = (n) => kids.indexOf(n);
-  const full = (h) => E.text(h).replace(strip || /$^/, '');
-  const entry = (h, mark) => ({ h, mark, chapter: !mark, label: opt.labels[h.id] || full(h), title: full(h) });
+  /* headings the page left without an id get one from their text, so they can be linked */
+  const used = new Set(E.$$('[id]').map((n) => n.id));
+  kids.forEach((n) => {
+    if (!levels.includes(n.tagName) || n.id) return;
+    const base = 'section---' + (E.text(n).replace(/[^A-Za-z0-9]+/g, ' ').trim().split(' ').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join('') || 'Part');
+    let id = base, i = 2; while (used.has(id)) id = base + '-' + i++;
+    used.add(id); n.id = id;
+  });
+  const full = (h) => E.text(h).replace(strip || /$^/, '').replace(/\s*:\s*$/, '');
+  const short = (s) => (s.length <= opt.maxLabel ? s : s.slice(0, opt.maxLabel - 1).replace(/\s+\S*$/, '') + '…');
+  const entry = (h, mark) => ({ h, mark, chapter: !mark, label: opt.labels[h.id] || short(full(h)), title: full(h) });
   const targets = [];
   if (m.summary && opt.includeSummary) targets.push(entry(m.summary, opt.marks[m.summary.id] || opt.summaryMark));
   let k = 0;

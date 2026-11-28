@@ -135,7 +135,7 @@ body#cxPromoArticleMain #mainContainer > .wiki-content > p:empty { display: none
    ------------------------------------------------------------------------- */
 body#cxPromoArticleMain #mainContainer > .wiki-content > react-ssr { display: block; grid-column: xwide; padding-top: 40px; }
 /* the Eureka breadcrumb scrolls sideways inside its own frame; keep the frame to the column */
-body#cxPromoArticleMain #mainContainer > .wiki-content > react-ssr .e2-overflow-frame { max-width: 100%; grid-template-columns: minmax(0, 1fr); }
+body#cxPromoArticleMain #mainContainer > .wiki-content > react-ssr .e2-overflow-frame { max-width: 100%; grid-template-columns: max-content minmax(0, 1fr) max-content; }
 body#cxPromoArticleMain #mainContainer > .wiki-content > react-ssr .e2-overflow-frame__mask { min-width: 0; overflow: hidden; }
 body#cxPromoArticleMain #mainContainer > .wiki-content > react-ssr .e2-overflow-frame__scrollable { overflow-x: auto; scrollbar-width: none; }
 body#cxPromoArticleMain #mainContainer > .wiki-content > div:has(> h1) {

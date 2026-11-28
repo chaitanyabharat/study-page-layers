@@ -48,3 +48,8 @@ html.enh:not(#enh) body .enh-viewer__hint { margin: 0; padding: 10px 20px 14px; 
 @media (max-width: 767.9px) {
   html.enh:not(#enh) body .enh-viewer.is-zoomed .enh-viewer__img { width: 1000px; }
 }
+/* a figure with no caption text (no alt text, no page caption): just the number and the button, on one line */
+@media (max-width: 767.9px) {
+  html.enh:not(#enh) body .enh-chart .enh-cap:has(> .enh-cap__t:empty) .enh-cap__n { grid-column: auto; align-self: center; }
+  html.enh:not(#enh) body .enh-chart .enh-cap > .enh-cap__t:empty { display: none; }
+}

@@ -1,11 +1,14 @@
 /* Skim mode: one switch shows only chapter openers, subheads, figures, stat
-   bars, pull stats and profile titles, with the reading time it saves. The
-   choice is remembered. Its switch goes in the contents rail and sheet (slot
-   "contents-footer"); without the contents component it sits before the first
-   chapter. Load it after the components whose output it keeps visible. */
+   bars, pull stats, tables, calls to action and profile titles, with the
+   reading time it saves. The choice is remembered. Its switch goes in the
+   contents rail and sheet (slot "contents-footer"); without the contents
+   component it sits before the first chapter. Load it after the components
+   whose output it keeps visible. */
 StudyEnh.define('skim', {
-  keep: '.enh-chart, .enh-pullstat, .enh-profiles, .enh-waffle, .enh-skim-inline, ul.enh-bars, ol',   // always kept
+  keep: '.enh-chart, .enh-pullstat, .enh-profiles, .enh-waffle, .enh-skim-inline, .enh-table, ul.enh-bars, ol, table, .tablesort-overflow, react-ssr, .interrupter-cta, .partner-list, [class*="cta"]',   // always kept
+  keepIntro: true,                              // everything before the first heading (title block, byline, standfirst)
   keepLede: true,                               // the first paragraph of each chapter
+  keepAnswers: true,                            // the first paragraph under a question heading ("…?")
   keepBoldLists: true,                          // lists where every item starts with a bold label
   keepProfileHeads: ':scope > b:first-child + i',
   wordsPerMinute: 230,
@@ -13,12 +16,23 @@ StudyEnh.define('skim', {
 }, (E, opt) => {
   const { el, tag, root } = E;
   const kids = E.blocks(), m = E.model();
-  const isLede = (n) => { const p1 = n.previousElementSibling, p2 = p1 && p1.previousElementSibling; return n.tagName === 'P' && ((p1 && p1.tagName === 'H2') || (p1 && p1.tagName === 'H3' && p2 && p2.tagName === 'H2')); };
+  const isHead = (n) => !!n && /^H[2-4]$/.test(n.tagName);
+  /* pages with no H2 chapters (list guides) use H3 as their chapters */
+  const hasH2 = kids.some((n) => n.tagName === 'H2');
+  const isLede = (n) => { const p1 = n.previousElementSibling, p2 = p1 && p1.previousElementSibling; return n.tagName === 'P' && ((p1 && p1.tagName === 'H2') || (p1 && p1.tagName === 'H3' && (!hasH2 || (p2 && p2.tagName === 'H2')))); };
+  const isAnswer = (n) => { const p1 = n.previousElementSibling; return n.tagName === 'P' && isHead(p1) && /\?\s*$/.test(E.text(p1)); };
+  /* the list right under a summary heading ("Key takeaways", "At a glance"…) at any level */
+  const sumRe = E.rx((E.config().summary || {}).text);
+  const isTakeaways = (n) => { const p1 = n.previousElementSibling; return /^(UL|OL)$/.test(n.tagName) && isHead(p1) && !!sumRe && sumRe.test(E.text(p1)); };
+  const firstHead = kids.find(isHead), introEnd = firstHead ? kids.indexOf(firstHead) : -1;
   const classify = () => {
     E.blocks().forEach((n) => {
       n.classList.remove('enh-skim-hide');
       if (E.inBackMatter(n) || E.inSummary(n) || n === m.summary || /^H[1-4]$/.test(n.tagName)) return;
-      if (n.matches(opt.keep)) return;
+      if (opt.keepIntro && kids.indexOf(n) > -1 && kids.indexOf(n) < introEnd) return;
+      if (n.matches(opt.keep) || n.querySelector('table, react-ssr, a[class*="button"], a[class*="cta"]')) return;
+      if (opt.keepAnswers && isAnswer(n)) return;
+      if (isTakeaways(n)) return;
       if (opt.keepBoldLists && n.tagName === 'UL' && Array.from(n.children).every((li) => li.firstElementChild && li.firstElementChild.tagName === 'B' && li.firstChild === li.firstElementChild)) return;
       if (n.tagName === 'P' && ((opt.keepLede && isLede(n)) || (opt.keepProfileHeads && n.querySelector(opt.keepProfileHeads)))) return;
       if (n.querySelector('iframe, .enh-video')) return;
